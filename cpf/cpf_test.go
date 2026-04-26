@@ -7,7 +7,7 @@ import (
 	"github.com/Multiform-Validator/go/cpf"
 )
 
-func TestIsCPFValid(t *testing.T) {
+func TestIsCPF(t *testing.T) {
 	tests := []struct {
 		name    string
 		cpf     string
@@ -29,15 +29,15 @@ func TestIsCPFValid(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := cpf.IsCPFValid(tt.cpf)
+			err := cpf.IsCPF(tt.cpf)
 			if !errors.Is(err, tt.wantErr) {
-				t.Errorf("IsCPFValid() error = %v, want %v", err, tt.wantErr)
+				t.Errorf("IsCPF() error = %v, want %v", err, tt.wantErr)
 			}
 		})
 	}
 }
 
-func TestIsCPFValidBytes(t *testing.T) {
+func TestIsCPFBytes(t *testing.T) {
 	tests := []struct {
 		name    string
 		cpf     []byte
@@ -58,9 +58,9 @@ func TestIsCPFValidBytes(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := cpf.IsCPFValidBytes(tt.cpf)
+			err := cpf.IsCPFBytes(tt.cpf)
 			if !errors.Is(err, tt.wantErr) {
-				t.Errorf("IsCPFValidBytes() error = %v, want %v", err, tt.wantErr)
+				t.Errorf("IsCPFBytes() error = %v, want %v", err, tt.wantErr)
 			}
 		})
 	}

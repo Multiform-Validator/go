@@ -22,11 +22,11 @@ import (
 )
 
 func main() {
-	if err := mv.IsCPFValid("123.456.789-09"); err != nil {
+	if err := mv.IsCPF("123.456.789-09"); err != nil {
 		fmt.Println(err)
 	}
 
-	if err := mv.IsCNPJValid("12.ABC.345/01DE-35"); err != nil {
+	if err := mv.IsCNPJ("12.ABC.345/01DE-35"); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -43,10 +43,10 @@ import (
 
 ## Available Validators
 
-- `IsCPFValid`
-- `IsCPFValidBytes`
-- `IsCNPJValid`
-- `IsCNPJValidBytes`
+- `IsCPF`
+- `IsCPFBytes`
+- `IsCNPJ`
+- `IsCNPJBytes`
 - `CalculateCNPJCheckDigits`
 
 ## Development

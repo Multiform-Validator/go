@@ -20,7 +20,7 @@ var (
 
 var cnpjCheckDigitWeights = [13]int{6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2}
 
-func IsCNPJValid(cnpj string) error {
+func IsCNPJ(cnpj string) error {
 	cnpj = removeFormattingCharacters(cnpj)
 	if len(cnpj) != cnpjSize {
 		return ErrCNPJMustHave14Characters
@@ -40,8 +40,8 @@ func IsCNPJValid(cnpj string) error {
 	return nil
 }
 
-func IsCNPJValidBytes(cnpj []byte) error {
-	return IsCNPJValid(string(cnpj))
+func IsCNPJBytes(cnpj []byte) error {
+	return IsCNPJ(string(cnpj))
 }
 
 func CalculateCNPJCheckDigits(baseCNPJ string) (string, error) {

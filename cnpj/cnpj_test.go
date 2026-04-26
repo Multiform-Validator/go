@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestIsCNPJValid(t *testing.T) {
+func TestIsCNPJ(t *testing.T) {
 	tests := []struct {
 		name    string
 		cnpj    string
@@ -36,15 +36,15 @@ func TestIsCNPJValid(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := IsCNPJValid(tt.cnpj)
+			err := IsCNPJ(tt.cnpj)
 			if !errors.Is(err, tt.wantErr) {
-				t.Errorf("IsCNPJValid() error = %v, want %v", err, tt.wantErr)
+				t.Errorf("IsCNPJ() error = %v, want %v", err, tt.wantErr)
 			}
 		})
 	}
 }
 
-func TestIsCNPJValidBytes(t *testing.T) {
+func TestIsCNPJBytes(t *testing.T) {
 	tests := []struct {
 		name    string
 		cnpj    []byte
@@ -62,9 +62,9 @@ func TestIsCNPJValidBytes(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := IsCNPJValidBytes(tt.cnpj)
+			err := IsCNPJBytes(tt.cnpj)
 			if !errors.Is(err, tt.wantErr) {
-				t.Errorf("IsCNPJValidBytes() error = %v, want %v", err, tt.wantErr)
+				t.Errorf("IsCNPJBytes() error = %v, want %v", err, tt.wantErr)
 			}
 		})
 	}

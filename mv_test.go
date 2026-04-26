@@ -2,43 +2,43 @@ package mv
 
 import "testing"
 
-func TestIsCPFValidFromRootPackage(t *testing.T) {
-	if err := IsCPFValid("123.456.789-09"); err != nil {
-		t.Fatalf("IsCPFValid() returned error for valid CPF: %v", err)
+func TestIsCPFFromRootPackage(t *testing.T) {
+	if err := IsCPF("123.456.789-09"); err != nil {
+		t.Fatalf("IsCPF() returned error for valid CPF: %v", err)
 	}
 
-	if err := IsCPFValid("123.456.789-02"); err == nil {
-		t.Fatal("IsCPFValid() expected error for invalid CPF, got nil")
-	}
-}
-
-func TestIsCPFValidBytesFromRootPackage(t *testing.T) {
-	if err := IsCPFValidBytes([]byte("123.456.789-09")); err != nil {
-		t.Fatalf("IsCPFValidBytes() returned error for valid CPF: %v", err)
-	}
-
-	if err := IsCPFValidBytes([]byte("123.456.789-02")); err == nil {
-		t.Fatal("IsCPFValidBytes() expected error for invalid CPF, got nil")
+	if err := IsCPF("123.456.789-02"); err == nil {
+		t.Fatal("IsCPF() expected error for invalid CPF, got nil")
 	}
 }
 
-func TestIsCNPJValidFromRootPackage(t *testing.T) {
-	if err := IsCNPJValid("12.ABC.345/01DE-35"); err != nil {
-		t.Fatalf("IsCNPJValid() returned error for valid CNPJ: %v", err)
+func TestIsCPFBytesFromRootPackage(t *testing.T) {
+	if err := IsCPFBytes([]byte("123.456.789-09")); err != nil {
+		t.Fatalf("IsCPFBytes() returned error for valid CPF: %v", err)
 	}
 
-	if err := IsCNPJValid("12.ABC.345/01DE-34"); err == nil {
-		t.Fatal("IsCNPJValid() expected error for invalid CNPJ, got nil")
+	if err := IsCPFBytes([]byte("123.456.789-02")); err == nil {
+		t.Fatal("IsCPFBytes() expected error for invalid CPF, got nil")
 	}
 }
 
-func TestIsCNPJValidBytesFromRootPackage(t *testing.T) {
-	if err := IsCNPJValidBytes([]byte("12.ABC.345/01DE-35")); err != nil {
-		t.Fatalf("IsCNPJValidBytes() returned error for valid CNPJ: %v", err)
+func TestIsCNPJFromRootPackage(t *testing.T) {
+	if err := IsCNPJ("12.ABC.345/01DE-35"); err != nil {
+		t.Fatalf("IsCNPJ() returned error for valid CNPJ: %v", err)
 	}
 
-	if err := IsCNPJValidBytes([]byte("12.ABC.345/01DE-34")); err == nil {
-		t.Fatal("IsCNPJValidBytes() expected error for invalid CNPJ, got nil")
+	if err := IsCNPJ("12.ABC.345/01DE-34"); err == nil {
+		t.Fatal("IsCNPJ() expected error for invalid CNPJ, got nil")
+	}
+}
+
+func TestIsCNPJBytesFromRootPackage(t *testing.T) {
+	if err := IsCNPJBytes([]byte("12.ABC.345/01DE-35")); err != nil {
+		t.Fatalf("IsCNPJBytes() returned error for valid CNPJ: %v", err)
+	}
+
+	if err := IsCNPJBytes([]byte("12.ABC.345/01DE-34")); err == nil {
+		t.Fatal("IsCNPJBytes() expected error for invalid CNPJ, got nil")
 	}
 }
 

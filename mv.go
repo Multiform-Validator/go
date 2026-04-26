@@ -5,20 +5,20 @@ import (
 	"github.com/Multiform-Validator/go/cpf"
 )
 
-func IsCPFValid(value string) error {
-	return cpf.IsCPFValid(value)
+func IsCPF(value string) error {
+	return cpf.IsCPF(value)
 }
 
-func IsCPFValidBytes(value []byte) error {
-	return cpf.IsCPFValidBytes(value)
+func IsCPFBytes(value []byte) error {
+	return cpf.IsCPFBytes(value)
 }
 
-func IsCNPJValid(value string) error {
-	return cnpj.IsCNPJValid(value)
+func IsCNPJ(value string) error {
+	return cnpj.IsCNPJ(value)
 }
 
-func IsCNPJValidBytes(value []byte) error {
-	return cnpj.IsCNPJValidBytes(value)
+func IsCNPJBytes(value []byte) error {
+	return cnpj.IsCNPJBytes(value)
 }
 
 func CalculateCNPJCheckDigits(value string) (string, error) {

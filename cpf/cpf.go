@@ -9,7 +9,7 @@ var (
 	ErrCPFNotValid         = errors.New("CPF is not valid")
 )
 
-func IsCPFValid(cpf string) error {
+func IsCPF(cpf string) error {
 	digits, count := extractDigitsFromString(cpf)
 	if count != 11 {
 		return ErrCPFMustHave11Digits
@@ -18,7 +18,7 @@ func IsCPFValid(cpf string) error {
 	return validateCPFDigits(digits)
 }
 
-func IsCPFValidBytes(cpf []byte) error {
+func IsCPFBytes(cpf []byte) error {
 	digits, count := extractDigitsFromBytes(cpf)
 	if count != 11 {
 		return ErrCPFMustHave11Digits
