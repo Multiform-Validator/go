@@ -25,7 +25,12 @@ func TestIsEmail(t *testing.T) {
 		{"invalid email with consecutive local dots", "first..last@example.com", email.ErrEmailNotValid},
 		{"invalid email with local dot at start", ".user@example.com", email.ErrEmailNotValid},
 		{"invalid email without domain dot", "user@example", email.ErrEmailNotValid},
+		{"invalid email with domain ending dot", "user@example.com.", email.ErrEmailNotValid},
 		{"invalid email with domain label starting hyphen", "user@-example.com", email.ErrEmailNotValid},
+		{"invalid email with domain label ending hyphen", "user@example-.com", email.ErrEmailNotValid},
+		{"invalid email with domain label too long", "user@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.com", email.ErrEmailNotValid},
+		{"invalid email with unsupported domain character", "user@exa_mple.com", email.ErrEmailNotValid},
+		{"invalid email with short tld", "user@example.c", email.ErrEmailNotValid},
 		{"invalid email with numeric tld", "user@example.c0m", email.ErrEmailNotValid},
 		{"invalid email with spaces", "us er@example.com", email.ErrEmailNotValid},
 	}

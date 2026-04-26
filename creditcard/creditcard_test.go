@@ -45,8 +45,10 @@ func TestIsCreditCardBytes(t *testing.T) {
 	}{
 		{"valid credit card bytes", []byte("4111111111111111"), nil},
 		{"valid credit card bytes with spaces", []byte("4111 1111 1111 1111"), nil},
+		{"valid credit card bytes with hyphens", []byte("4111-1111-1111-1111"), nil},
 		{"invalid credit card bytes empty value", []byte(""), creditcard.ErrCreditCardMustHaveBetween12And19Digits},
 		{"invalid credit card bytes nil value", nil, creditcard.ErrCreditCardMustHaveBetween12And19Digits},
+		{"invalid credit card bytes with more than 19 digits", []byte("41111111111111111111"), creditcard.ErrCreditCardMustHaveBetween12And19Digits},
 		{"invalid credit card bytes checksum", []byte("4111111111111112"), creditcard.ErrCreditCardNotValid},
 		{"invalid credit card bytes with letters", []byte("411111111111111A"), creditcard.ErrCreditCardNotValid},
 	}
