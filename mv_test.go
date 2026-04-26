@@ -1,6 +1,11 @@
 package mv
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+
+	"github.com/Multiform-Validator/go/email"
+)
 
 func TestIsCPFFromRootPackage(t *testing.T) {
 	if err := IsCPF("123.456.789-09"); err != nil {
@@ -59,6 +64,29 @@ func TestIsEmailBytesFromRootPackage(t *testing.T) {
 
 	if err := IsEmailBytes([]byte("user.example.com")); err == nil {
 		t.Fatal("IsEmailBytes() expected error for invalid email, got nil")
+	}
+}
+
+func TestGetOnlyEmailFromRootPackage(t *testing.T) {
+	got := GetOnlyEmail("Contact team: john@gmail.com, alexa@gmail.com")
+	if got != "john@gmail.com" {
+		t.Fatalf("GetOnlyEmail() = %q, want %q", got, "john@gmail.com")
+	}
+
+	got = GetOnlyEmail("Contact team")
+	if got != email.NoEmailFound {
+		t.Fatalf("GetOnlyEmail() = %q, want %q", got, email.NoEmailFound)
+	}
+}
+
+func TestGetOnlyEmailsFromRootPackage(t *testing.T) {
+	got := GetOnlyEmails(
+		"Contact team: john@gmail.comXTRA, alexa@gmail.comXTRA",
+		email.GetOnlyEmailOptions{CleanDomain: true, RepeatEmail: true},
+	)
+	want := []string{"john@gmail.com", "alexa@gmail.com"}
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("GetOnlyEmails() = %#v, want %#v", got, want)
 	}
 }
 

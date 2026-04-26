@@ -37,6 +37,14 @@ func IsEmailBytes(value []byte) error {
 	return email.IsEmailBytes(value)
 }
 
+func GetOnlyEmail(value string, options ...email.GetOnlyEmailOptions) string {
+	return email.GetOnlyEmail(value, options...)
+}
+
+func GetOnlyEmails(value string, options ...email.GetOnlyEmailOptions) []string {
+	return email.GetOnlyEmails(value, options...)
+}
+
 func IsCreditCard(value string) error {
 	return creditcard.IsCreditCard(value)
 }

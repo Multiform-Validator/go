@@ -34,6 +34,8 @@ func main() {
 		fmt.Println(err)
 	}
 
+	fmt.Println(mv.GetOnlyEmail("Contact team: joao@empresa.com, maria@empresa.com"))
+
 	if err := mv.IsCreditCard("4111 1111 1111 1111"); err != nil {
 		fmt.Println(err)
 	}
@@ -81,6 +83,8 @@ import (
 - `IsCNPJBytes`
 - `IsEmail`
 - `IsEmailBytes`
+- `GetOnlyEmail`
+- `GetOnlyEmails`
 - `IsCreditCard`
 - `IsCreditCardBytes`
 - `IsEmpty`
