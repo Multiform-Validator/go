@@ -42,6 +42,46 @@ func TestIsCNPJBytesFromRootPackage(t *testing.T) {
 	}
 }
 
+func TestIsEmailFromRootPackage(t *testing.T) {
+	if err := IsEmail("user@example.com"); err != nil {
+		t.Fatalf("IsEmail() returned error for valid email: %v", err)
+	}
+
+	if err := IsEmail("user.example.com"); err == nil {
+		t.Fatal("IsEmail() expected error for invalid email, got nil")
+	}
+}
+
+func TestIsEmailBytesFromRootPackage(t *testing.T) {
+	if err := IsEmailBytes([]byte("user@example.com")); err != nil {
+		t.Fatalf("IsEmailBytes() returned error for valid email: %v", err)
+	}
+
+	if err := IsEmailBytes([]byte("user.example.com")); err == nil {
+		t.Fatal("IsEmailBytes() expected error for invalid email, got nil")
+	}
+}
+
+func TestIsCreditCardFromRootPackage(t *testing.T) {
+	if err := IsCreditCard("4111 1111 1111 1111"); err != nil {
+		t.Fatalf("IsCreditCard() returned error for valid credit card: %v", err)
+	}
+
+	if err := IsCreditCard("4111 1111 1111 1112"); err == nil {
+		t.Fatal("IsCreditCard() expected error for invalid credit card, got nil")
+	}
+}
+
+func TestIsCreditCardBytesFromRootPackage(t *testing.T) {
+	if err := IsCreditCardBytes([]byte("4111 1111 1111 1111")); err != nil {
+		t.Fatalf("IsCreditCardBytes() returned error for valid credit card: %v", err)
+	}
+
+	if err := IsCreditCardBytes([]byte("4111 1111 1111 1112")); err == nil {
+		t.Fatal("IsCreditCardBytes() expected error for invalid credit card, got nil")
+	}
+}
+
 func TestCalculateCNPJCheckDigitsFromRootPackage(t *testing.T) {
 	got, err := CalculateCNPJCheckDigits("12ABC34501DE")
 	if err != nil {

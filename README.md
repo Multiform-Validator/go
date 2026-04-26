@@ -2,7 +2,7 @@
 
 Go library made for validating several form fields and common values, such as email, telephone, password, CPF, CNPJ, credit card, image MIME type magic numbers, and much more.
 
-This package is the Go version of Multiform Validator. It currently includes CPF and CNPJ validation, with more validators being added over time. The CNPJ validator supports both the classic numeric format and the new alphanumeric format.
+This package is the Go version of Multiform Validator. It currently includes CPF, CNPJ, email, and credit card validation, with more validators being added over time. The CNPJ validator supports both the classic numeric format and the new alphanumeric format.
 
 ## Install
 
@@ -29,6 +29,14 @@ func main() {
 	if err := mv.IsCNPJ("12.ABC.345/01DE-35"); err != nil {
 		fmt.Println(err)
 	}
+
+	if err := mv.IsEmail("user@example.com"); err != nil {
+		fmt.Println(err)
+	}
+
+	if err := mv.IsCreditCard("4111 1111 1111 1111"); err != nil {
+		fmt.Println(err)
+	}
 }
 ```
 
@@ -38,6 +46,8 @@ You can also import each validator package directly:
 import (
 	"github.com/Multiform-Validator/go/cnpj"
 	"github.com/Multiform-Validator/go/cpf"
+	"github.com/Multiform-Validator/go/creditcard"
+	"github.com/Multiform-Validator/go/email"
 )
 ```
 
@@ -47,6 +57,10 @@ import (
 - `IsCPFBytes`
 - `IsCNPJ`
 - `IsCNPJBytes`
+- `IsEmail`
+- `IsEmailBytes`
+- `IsCreditCard`
+- `IsCreditCardBytes`
 - `CalculateCNPJCheckDigits`
 
 ## Development

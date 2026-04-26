@@ -3,6 +3,8 @@ package mv
 import (
 	"github.com/Multiform-Validator/go/cnpj"
 	"github.com/Multiform-Validator/go/cpf"
+	"github.com/Multiform-Validator/go/creditcard"
+	"github.com/Multiform-Validator/go/email"
 )
 
 func IsCPF(value string) error {
@@ -19,6 +21,22 @@ func IsCNPJ(value string) error {
 
 func IsCNPJBytes(value []byte) error {
 	return cnpj.IsCNPJBytes(value)
+}
+
+func IsEmail(value string) error {
+	return email.IsEmail(value)
+}
+
+func IsEmailBytes(value []byte) error {
+	return email.IsEmailBytes(value)
+}
+
+func IsCreditCard(value string) error {
+	return creditcard.IsCreditCard(value)
+}
+
+func IsCreditCardBytes(value []byte) error {
+	return creditcard.IsCreditCardBytes(value)
 }
 
 func CalculateCNPJCheckDigits(value string) (string, error) {
