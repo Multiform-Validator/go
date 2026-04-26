@@ -51,7 +51,7 @@ func CalculateCNPJCheckDigits(baseCNPJ string) (string, error) {
 	}
 
 	first := calculateDigit(baseCNPJ)
-	second := calculateDigit(baseCNPJ + string(byte(first)+'0'))
+	second := calculateDigit(baseCNPJ + fmt.Sprintf("%d", first))
 
 	return fmt.Sprintf("%d%d", first, second), nil
 }
