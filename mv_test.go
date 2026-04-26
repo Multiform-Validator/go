@@ -82,6 +82,46 @@ func TestIsCreditCardBytesFromRootPackage(t *testing.T) {
 	}
 }
 
+func TestIsEmptyFromRootPackage(t *testing.T) {
+	if err := IsEmpty(""); err != nil {
+		t.Fatalf("IsEmpty() returned error for empty value: %v", err)
+	}
+
+	if err := IsEmpty(" "); err == nil {
+		t.Fatal("IsEmpty() expected error for non-empty value, got nil")
+	}
+}
+
+func TestIsEmptyBytesFromRootPackage(t *testing.T) {
+	if err := IsEmptyBytes(nil); err != nil {
+		t.Fatalf("IsEmptyBytes() returned error for nil bytes: %v", err)
+	}
+
+	if err := IsEmptyBytes([]byte(" ")); err == nil {
+		t.Fatal("IsEmptyBytes() expected error for non-empty bytes, got nil")
+	}
+}
+
+func TestIsBlankFromRootPackage(t *testing.T) {
+	if err := IsBlank("   "); err != nil {
+		t.Fatalf("IsBlank() returned error for blank value: %v", err)
+	}
+
+	if err := IsBlank("value"); err == nil {
+		t.Fatal("IsBlank() expected error for non-blank value, got nil")
+	}
+}
+
+func TestIsBlankBytesFromRootPackage(t *testing.T) {
+	if err := IsBlankBytes([]byte("   ")); err != nil {
+		t.Fatalf("IsBlankBytes() returned error for blank bytes: %v", err)
+	}
+
+	if err := IsBlankBytes([]byte("value")); err == nil {
+		t.Fatal("IsBlankBytes() expected error for non-blank bytes, got nil")
+	}
+}
+
 func TestCalculateCNPJCheckDigitsFromRootPackage(t *testing.T) {
 	got, err := CalculateCNPJCheckDigits("12ABC34501DE")
 	if err != nil {

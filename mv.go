@@ -5,6 +5,7 @@ import (
 	"github.com/Multiform-Validator/go/cpf"
 	"github.com/Multiform-Validator/go/creditcard"
 	"github.com/Multiform-Validator/go/email"
+	"github.com/Multiform-Validator/go/text"
 )
 
 func IsCPF(value string) error {
@@ -37,6 +38,22 @@ func IsCreditCard(value string) error {
 
 func IsCreditCardBytes(value []byte) error {
 	return creditcard.IsCreditCardBytes(value)
+}
+
+func IsEmpty(value string) error {
+	return text.IsEmpty(value)
+}
+
+func IsEmptyBytes(value []byte) error {
+	return text.IsEmptyBytes(value)
+}
+
+func IsBlank(value string) error {
+	return text.IsBlank(value)
+}
+
+func IsBlankBytes(value []byte) error {
+	return text.IsBlankBytes(value)
 }
 
 func CalculateCNPJCheckDigits(value string) (string, error) {
