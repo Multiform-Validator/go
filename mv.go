@@ -1,10 +1,15 @@
 package mv
 
 import (
+	"github.com/Multiform-Validator/go/ascii"
+	"github.com/Multiform-Validator/go/base64"
+	"github.com/Multiform-Validator/go/cep"
 	"github.com/Multiform-Validator/go/cnpj"
 	"github.com/Multiform-Validator/go/cpf"
 	"github.com/Multiform-Validator/go/creditcard"
 	"github.com/Multiform-Validator/go/email"
+	"github.com/Multiform-Validator/go/md5"
+	"github.com/Multiform-Validator/go/port"
 	"github.com/Multiform-Validator/go/text"
 )
 
@@ -54,6 +59,46 @@ func IsBlank(value string) error {
 
 func IsBlankBytes(value []byte) error {
 	return text.IsBlankBytes(value)
+}
+
+func IsAscii(value string) error {
+	return ascii.IsAscii(value)
+}
+
+func IsAsciiBytes(value []byte) error {
+	return ascii.IsAsciiBytes(value)
+}
+
+func IsBase64(value string) error {
+	return base64.IsBase64(value)
+}
+
+func IsBase64Bytes(value []byte) error {
+	return base64.IsBase64Bytes(value)
+}
+
+func IsCEP(value string) error {
+	return cep.IsCEP(value)
+}
+
+func IsCEPBytes(value []byte) error {
+	return cep.IsCEPBytes(value)
+}
+
+func IsMD5(value string) error {
+	return md5.IsMD5(value)
+}
+
+func IsMD5Bytes(value []byte) error {
+	return md5.IsMD5Bytes(value)
+}
+
+func IsPort(value string) error {
+	return port.IsPort(value)
+}
+
+func IsPortBytes(value []byte) error {
+	return port.IsPortBytes(value)
 }
 
 func CalculateCNPJCheckDigits(value string) (string, error) {

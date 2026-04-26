@@ -122,6 +122,106 @@ func TestIsBlankBytesFromRootPackage(t *testing.T) {
 	}
 }
 
+func TestIsAsciiFromRootPackage(t *testing.T) {
+	if err := IsAscii("Hello 123!"); err != nil {
+		t.Fatalf("IsAscii() returned error for valid ASCII: %v", err)
+	}
+
+	if err := IsAscii("olá"); err == nil {
+		t.Fatal("IsAscii() expected error for invalid ASCII, got nil")
+	}
+}
+
+func TestIsAsciiBytesFromRootPackage(t *testing.T) {
+	if err := IsAsciiBytes([]byte("Hello 123!")); err != nil {
+		t.Fatalf("IsAsciiBytes() returned error for valid ASCII bytes: %v", err)
+	}
+
+	if err := IsAsciiBytes([]byte{0x48, 0x80}); err == nil {
+		t.Fatal("IsAsciiBytes() expected error for invalid ASCII bytes, got nil")
+	}
+}
+
+func TestIsBase64FromRootPackage(t *testing.T) {
+	if err := IsBase64("SGVsbG8="); err != nil {
+		t.Fatalf("IsBase64() returned error for valid base64: %v", err)
+	}
+
+	if err := IsBase64("not base64!"); err == nil {
+		t.Fatal("IsBase64() expected error for invalid base64, got nil")
+	}
+}
+
+func TestIsBase64BytesFromRootPackage(t *testing.T) {
+	if err := IsBase64Bytes([]byte("SGVsbG8=")); err != nil {
+		t.Fatalf("IsBase64Bytes() returned error for valid base64 bytes: %v", err)
+	}
+
+	if err := IsBase64Bytes([]byte("not base64!")); err == nil {
+		t.Fatal("IsBase64Bytes() expected error for invalid base64 bytes, got nil")
+	}
+}
+
+func TestIsCEPFromRootPackage(t *testing.T) {
+	if err := IsCEP("12345-678"); err != nil {
+		t.Fatalf("IsCEP() returned error for valid CEP: %v", err)
+	}
+
+	if err := IsCEP("12345-67A"); err == nil {
+		t.Fatal("IsCEP() expected error for invalid CEP, got nil")
+	}
+}
+
+func TestIsCEPBytesFromRootPackage(t *testing.T) {
+	if err := IsCEPBytes([]byte("12345-678")); err != nil {
+		t.Fatalf("IsCEPBytes() returned error for valid CEP bytes: %v", err)
+	}
+
+	if err := IsCEPBytes([]byte("12345-67A")); err == nil {
+		t.Fatal("IsCEPBytes() expected error for invalid CEP bytes, got nil")
+	}
+}
+
+func TestIsMD5FromRootPackage(t *testing.T) {
+	if err := IsMD5("d41d8cd98f00b204e9800998ecf8427e"); err != nil {
+		t.Fatalf("IsMD5() returned error for valid MD5: %v", err)
+	}
+
+	if err := IsMD5("d41d8cd98f00b204e9800998ecf8427g"); err == nil {
+		t.Fatal("IsMD5() expected error for invalid MD5, got nil")
+	}
+}
+
+func TestIsMD5BytesFromRootPackage(t *testing.T) {
+	if err := IsMD5Bytes([]byte("d41d8cd98f00b204e9800998ecf8427e")); err != nil {
+		t.Fatalf("IsMD5Bytes() returned error for valid MD5 bytes: %v", err)
+	}
+
+	if err := IsMD5Bytes([]byte("d41d8cd98f00b204e9800998ecf8427g")); err == nil {
+		t.Fatal("IsMD5Bytes() expected error for invalid MD5 bytes, got nil")
+	}
+}
+
+func TestIsPortFromRootPackage(t *testing.T) {
+	if err := IsPort("8080"); err != nil {
+		t.Fatalf("IsPort() returned error for valid port: %v", err)
+	}
+
+	if err := IsPort("65536"); err == nil {
+		t.Fatal("IsPort() expected error for invalid port, got nil")
+	}
+}
+
+func TestIsPortBytesFromRootPackage(t *testing.T) {
+	if err := IsPortBytes([]byte("8080")); err != nil {
+		t.Fatalf("IsPortBytes() returned error for valid port bytes: %v", err)
+	}
+
+	if err := IsPortBytes([]byte("65536")); err == nil {
+		t.Fatal("IsPortBytes() expected error for invalid port bytes, got nil")
+	}
+}
+
 func TestCalculateCNPJCheckDigitsFromRootPackage(t *testing.T) {
 	got, err := CalculateCNPJCheckDigits("12ABC34501DE")
 	if err != nil {

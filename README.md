@@ -2,7 +2,7 @@
 
 Go library made for validating several form fields and common values, such as email, telephone, password, CPF, CNPJ, credit card, image MIME type magic numbers, and much more.
 
-This package is the Go version of Multiform Validator. It currently includes CPF, CNPJ, email, credit card, empty, and blank validation, with more validators being added over time. The CNPJ validator supports both the classic numeric format and the new alphanumeric format.
+This package is the Go version of Multiform Validator. It currently includes CPF, CNPJ, email, credit card, empty, blank, ASCII, Base64, CEP, MD5, and port validation, with more validators being added over time. The CNPJ validator supports both the classic numeric format and the new alphanumeric format.
 
 ## Install
 
@@ -45,6 +45,14 @@ func main() {
 	if err := mv.IsBlank("   "); err != nil {
 		fmt.Println(err)
 	}
+
+	if err := mv.IsCEP("12345-678"); err != nil {
+		fmt.Println(err)
+	}
+
+	if err := mv.IsPort("8080"); err != nil {
+		fmt.Println(err)
+	}
 }
 ```
 
@@ -52,10 +60,15 @@ You can also import each validator package directly:
 
 ```go
 import (
+	"github.com/Multiform-Validator/go/ascii"
+	"github.com/Multiform-Validator/go/base64"
+	"github.com/Multiform-Validator/go/cep"
 	"github.com/Multiform-Validator/go/cnpj"
 	"github.com/Multiform-Validator/go/cpf"
 	"github.com/Multiform-Validator/go/creditcard"
 	"github.com/Multiform-Validator/go/email"
+	"github.com/Multiform-Validator/go/md5"
+	"github.com/Multiform-Validator/go/port"
 	"github.com/Multiform-Validator/go/text"
 )
 ```
@@ -74,6 +87,16 @@ import (
 - `IsEmptyBytes`
 - `IsBlank`
 - `IsBlankBytes`
+- `IsAscii`
+- `IsAsciiBytes`
+- `IsBase64`
+- `IsBase64Bytes`
+- `IsCEP`
+- `IsCEPBytes`
+- `IsMD5`
+- `IsMD5Bytes`
+- `IsPort`
+- `IsPortBytes`
 - `CalculateCNPJCheckDigits`
 
 ## Development
