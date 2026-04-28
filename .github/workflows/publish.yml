@@ -1,0 +1,52 @@
+name: Publish
+
+on:
+  release:
+    types:
+      - published
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version tag to publish, for example v1.2.3
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: Publish Go Module
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+          cache-dependency-path: go.mod
+
+      - name: Resolve version
+        id: version
+        run: |
+          version="${{ github.event.release.tag_name || inputs.version }}"
+
+          if [ -z "${version}" ]; then
+            echo "version is required"
+            exit 1
+          fi
+
+          case "${version}" in
+            v*) ;;
+            *) version="v${version}" ;;
+          esac
+
+          echo "version=${version}" >> "${GITHUB_OUTPUT}"
+
+      - name: Publish to Go proxy
+        run: GOPROXY=https://proxy.golang.org go list -m github.com/Multiform-Validator/go@${{ steps.version.outputs.version }}
