@@ -1,22 +1,23 @@
 package ascii
 
-import "errors"
+import (
+	"errors"
+)
 
 var (
 	ErrASCIINotValid = errors.New("ASCII is not valid")
 )
 
 func IsAscii(value string) error {
-	for i := 0; i < len(value); i++ {
-		if value[i] > 127 {
-			return ErrASCIINotValid
-		}
-	}
+	return isAscii(value)
 
-	return nil
 }
 
 func IsAsciiBytes(value []byte) error {
+	return isAscii(value)
+}
+
+func isAscii[T string | []byte](value T) error {
 	for i := 0; i < len(value); i++ {
 		if value[i] > 127 {
 			return ErrASCIINotValid
