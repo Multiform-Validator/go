@@ -10,7 +10,6 @@ var (
 )
 
 func IsEmail(email string) error {
-	email = strings.TrimSpace(email)
 	if !isEmailFormationValid(email) {
 		return ErrEmailNotValid
 	}
@@ -36,6 +35,10 @@ func isEmailFormationValid(email string) bool {
 
 func isLocalPartValid(local string) bool {
 	if len(local) == 0 || len(local) > 64 || local[0] == '.' || local[len(local)-1] == '.' {
+		return false
+	}
+
+	if !isLetter(local[0]) {
 		return false
 	}
 
@@ -65,7 +68,7 @@ func isAllowedLocalCharacter(c byte) bool {
 	}
 
 	switch c {
-	case '!', '#', '$', '%', '&', '\'', '*', '+', '-', '/', '=', '?', '^', '_', '`', '{', '|', '}', '~':
+	case '.', '_', '%', '+', '-':
 		return true
 	}
 
@@ -82,10 +85,17 @@ func isDomainValid(domain string) bool {
 		return false
 	}
 
+	seenLabels := make(map[string]struct{}, len(labels))
 	for _, label := range labels {
 		if !isDomainLabelValid(label) {
 			return false
 		}
+
+		normalizedLabel := strings.ToLower(label)
+		if _, ok := seenLabels[normalizedLabel]; ok {
+			return false
+		}
+		seenLabels[normalizedLabel] = struct{}{}
 	}
 
 	tld := labels[len(labels)-1]
@@ -107,7 +117,7 @@ func isDomainLabelValid(label string) bool {
 		return false
 	}
 
-	if !isLetter(label[0]) && !isDigit(label[0]) {
+	if !isLetter(label[0]) {
 		return false
 	}
 
