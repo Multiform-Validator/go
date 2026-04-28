@@ -2,7 +2,7 @@
 
 Go library made for validating several form fields and common values, such as email, telephone, password, CPF, CNPJ, credit card, image MIME type magic numbers, and much more.
 
-This package is the Go version of Multiform Validator. It currently includes CPF, CNPJ, email, credit card, empty, blank, ASCII, Base64, CEP, MD5, and port validation, with more validators being added over time. The CNPJ validator supports both the classic numeric format and the new alphanumeric format.
+This package is the Go version of Multiform Validator. It currently includes CPF, CNPJ, email, credit card, empty, blank, ASCII, Base64, CEP, MD5, and port validation, with more validators being added over time. The CNPJ validator supports both the old LEGACY numeric CNPJ format and the new alphanumeric CNPJ format, in accordance with the official Receita Federal / SERPRO specification.
 
 ## Install
 
@@ -27,6 +27,10 @@ func main() {
 	}
 
 	if err := mv.IsCNPJ("12.ABC.345/01DE-35"); err != nil {
+		fmt.Println(err)
+	}
+
+	if err := mv.IsCNPJ("04.252.011/0001-10"); err != nil {
 		fmt.Println(err)
 	}
 
