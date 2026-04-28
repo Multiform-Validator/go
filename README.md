@@ -70,6 +70,8 @@ func main() {
 		fmt.Println(err)
 	}
 
+	fmt.Println(mv.IdentifyFlagCard("4111 1111 1111 1111"))
+
 	if err := mv.IsTelephone("+55 11 91234-5678", "BR"); err != nil {
 		fmt.Println(err)
 	}
@@ -83,6 +85,14 @@ func main() {
 	}
 
 	if err := mv.IsCEP("12345-678"); err != nil {
+		fmt.Println(err)
+	}
+
+	if err := mv.IsPostalCode("10045-123", "BR"); err != nil {
+		fmt.Println(err)
+	}
+
+	if err := mv.IsMACAddress("00:1A:2B:3C:4D:5E"); err != nil {
 		fmt.Println(err)
 	}
 
@@ -108,8 +118,10 @@ import (
 	"github.com/Multiform-Validator/go/creditcard"
 	"github.com/Multiform-Validator/go/email"
 	"github.com/Multiform-Validator/go/image"
+	"github.com/Multiform-Validator/go/macaddress"
 	"github.com/Multiform-Validator/go/md5"
 	"github.com/Multiform-Validator/go/port"
+	"github.com/Multiform-Validator/go/postalcode"
 	"github.com/Multiform-Validator/go/telephone"
 	"github.com/Multiform-Validator/go/text"
 	"github.com/Multiform-Validator/go/validate"
@@ -131,6 +143,7 @@ The `validate` package is intentionally separate and works a little differently.
 - `GetOnlyEmail`
 - `GetOnlyEmails`
 - `IsCreditCard`
+- `IdentifyFlagCard`
 - `IsTelephone`
 - `IsEmpty`
 - `IsEmptyBytes`
@@ -139,7 +152,9 @@ The `validate` package is intentionally separate and works a little differently.
 - `IsAscii`
 - `IsAsciiBytes`
 - `IsBase64`
+- `IsMACAddress`
 - `IsCEP`
+- `IsPostalCode`
 - `IsMD5`
 - `IsPort`
 - `IsPortNumber`
@@ -148,6 +163,10 @@ The `validate` package is intentionally separate and works a little differently.
 - `validate.Password`
 
 `IsTelephone` accepts an optional country argument. Current country-specific validation supports Brazil, United States, China, Japan, Germany, India, United Kingdom, France, Italy, Canada, and South Korea.
+
+`IsPostalCode` accepts an optional country argument. Current country-specific validation supports Brazil, United States, Canada, United Kingdom, France, Netherlands, Japan, Spain, South Africa, Germany, Switzerland, and Italy.
+
+`IdentifyFlagCard` is a special helper from the credit card package, similar to how `GetOnlyEmail` belongs to the email package. It identifies the card flag by prefix and returns `Unknown` when no known flag matches.
 
 `validate.Email` provides higher-level email validation options inspired by the TypeScript package: max length, country suffix, default allowed domains, and custom allowed domains.
 

@@ -9,8 +9,10 @@ import (
 	"github.com/Multiform-Validator/go/creditcard"
 	"github.com/Multiform-Validator/go/email"
 	"github.com/Multiform-Validator/go/image"
+	"github.com/Multiform-Validator/go/macaddress"
 	"github.com/Multiform-Validator/go/md5"
 	"github.com/Multiform-Validator/go/port"
+	"github.com/Multiform-Validator/go/postalcode"
 	"github.com/Multiform-Validator/go/telephone"
 	"github.com/Multiform-Validator/go/text"
 )
@@ -41,6 +43,10 @@ func GetOnlyEmails(value string, options ...email.GetOnlyEmailOptions) []string 
 
 func IsCreditCard(value string) error {
 	return creditcard.IsCreditCard(value)
+}
+
+func IdentifyFlagCard(value string) string {
+	return creditcard.IdentifyFlagCard(value)
 }
 
 func IsTelephone(value string, countries ...string) error {
@@ -75,8 +81,16 @@ func IsBase64(value string) error {
 	return base64.IsBase64(value)
 }
 
+func IsMACAddress(value string) error {
+	return macaddress.IsMACAddress(value)
+}
+
 func IsCEP(value string) error {
 	return cep.IsCEP(value)
+}
+
+func IsPostalCode(value string, countries ...string) error {
+	return postalcode.IsPostalCode(value, countries...)
 }
 
 func IsMD5(value string) error {

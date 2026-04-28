@@ -98,6 +98,16 @@ func TestIsCreditCardFromRootPackage(t *testing.T) {
 	}
 }
 
+func TestIdentifyFlagCardFromRootPackage(t *testing.T) {
+	if got := IdentifyFlagCard("4111 1111 1111 1111"); got != "Visa" {
+		t.Fatalf("IdentifyFlagCard() = %q, want %q", got, "Visa")
+	}
+
+	if got := IdentifyFlagCard("7000000000000000"); got != "Unknown" {
+		t.Fatalf("IdentifyFlagCard() = %q, want %q", got, "Unknown")
+	}
+}
+
 func TestIsTelephoneFromRootPackage(t *testing.T) {
 	if err := IsTelephone("+55 11 91234-5678", "BR"); err != nil {
 		t.Fatalf("IsTelephone() returned error for valid telephone: %v", err)
@@ -178,6 +188,16 @@ func TestIsBase64FromRootPackage(t *testing.T) {
 	}
 }
 
+func TestIsMACAddressFromRootPackage(t *testing.T) {
+	if err := IsMACAddress("00:1A:2B:3C:4D:5E"); err != nil {
+		t.Fatalf("IsMACAddress() returned error for valid MAC address: %v", err)
+	}
+
+	if err := IsMACAddress("00:1A:2B:3C:4D:ZZ"); err == nil {
+		t.Fatal("IsMACAddress() expected error for invalid MAC address, got nil")
+	}
+}
+
 func TestIsCEPFromRootPackage(t *testing.T) {
 	if err := IsCEP("12345-678"); err != nil {
 		t.Fatalf("IsCEP() returned error for valid CEP: %v", err)
@@ -185,6 +205,16 @@ func TestIsCEPFromRootPackage(t *testing.T) {
 
 	if err := IsCEP("12345-67A"); err == nil {
 		t.Fatal("IsCEP() expected error for invalid CEP, got nil")
+	}
+}
+
+func TestIsPostalCodeFromRootPackage(t *testing.T) {
+	if err := IsPostalCode("10045-123", "BR"); err != nil {
+		t.Fatalf("IsPostalCode() returned error for valid postal code: %v", err)
+	}
+
+	if err := IsPostalCode("10045-12", "BR"); err == nil {
+		t.Fatal("IsPostalCode() expected error for invalid postal code, got nil")
 	}
 }
 
