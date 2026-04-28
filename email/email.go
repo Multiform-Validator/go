@@ -18,10 +18,6 @@ func IsEmail(email string) error {
 	return nil
 }
 
-func IsEmailBytes(email []byte) error {
-	return IsEmail(string(email))
-}
-
 func isEmailFormationValid(email string) bool {
 	if len(email) == 0 || len(email) > 254 {
 		return false

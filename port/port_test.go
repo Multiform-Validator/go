@@ -35,29 +35,6 @@ func TestIsPort(t *testing.T) {
 	}
 }
 
-func TestIsPortBytes(t *testing.T) {
-	tests := []struct {
-		name    string
-		port    []byte
-		wantErr error
-	}{
-		{"valid port bytes", []byte("8080"), nil},
-		{"invalid port bytes empty value", []byte(""), port.ErrPortNotValid},
-		{"invalid port bytes nil value", nil, port.ErrPortNotValid},
-		{"invalid port bytes above maximum", []byte("65536"), port.ErrPortMustBeBetween1And65535},
-		{"invalid port bytes with letters", []byte("80a"), port.ErrPortNotValid},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			err := port.IsPortBytes(tt.port)
-			if !errors.Is(err, tt.wantErr) {
-				t.Errorf("IsPortBytes() error = %v, want %v", err, tt.wantErr)
-			}
-		})
-	}
-}
-
 func TestIsPortNumber(t *testing.T) {
 	tests := []struct {
 		name    string

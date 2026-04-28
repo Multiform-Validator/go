@@ -16,10 +16,6 @@ func IsMD5(value string) error {
 	return nil
 }
 
-func IsMD5Bytes(value []byte) error {
-	return IsMD5(string(value))
-}
-
 func isMD5FormationValid(value string) bool {
 	if len(value) != md5Size {
 		return false

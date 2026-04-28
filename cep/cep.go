@@ -29,10 +29,6 @@ func IsCEP(cep string) error {
 	return nil
 }
 
-func IsCEPBytes(cep []byte) error {
-	return IsCEP(string(cep))
-}
-
 func removeFormattingCharacters(cep string) (string, bool) {
 	cep = strings.TrimSpace(cep)
 	if strings.ContainsAny(cep, "./ ") {

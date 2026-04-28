@@ -27,44 +27,7 @@ func IsCreditCard(creditCard string) error {
 	return validateCreditCardDigits(digits[:count])
 }
 
-func IsCreditCardBytes(creditCard []byte) error {
-	digits, count, ok := extractDigitsFromBytes(creditCard)
-	if !ok {
-		return ErrCreditCardNotValid
-	}
-
-	if count < minCreditCardDigits || count > maxCreditCardDigits {
-		return ErrCreditCardMustHaveBetween12And19Digits
-	}
-
-	return validateCreditCardDigits(digits[:count])
-}
-
 func extractDigitsFromString(input string) ([maxCreditCardDigits]byte, int, bool) {
-	var digits [maxCreditCardDigits]byte
-	count := 0
-	for i := 0; i < len(input); i++ {
-		c := input[i]
-		if c == ' ' || c == '-' {
-			continue
-		}
-
-		if c < '0' || c > '9' {
-			return digits, count, false
-		}
-
-		if count == maxCreditCardDigits {
-			return digits, count + 1, true
-		}
-
-		digits[count] = c - '0'
-		count++
-	}
-
-	return digits, count, true
-}
-
-func extractDigitsFromBytes(input []byte) ([maxCreditCardDigits]byte, int, bool) {
 	var digits [maxCreditCardDigits]byte
 	count := 0
 	for i := 0; i < len(input); i++ {

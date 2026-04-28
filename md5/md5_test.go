@@ -30,25 +30,3 @@ func TestIsMD5(t *testing.T) {
 		})
 	}
 }
-
-func TestIsMD5Bytes(t *testing.T) {
-	tests := []struct {
-		name    string
-		value   []byte
-		wantErr error
-	}{
-		{"valid MD5 bytes", []byte("d41d8cd98f00b204e9800998ecf8427e"), nil},
-		{"invalid MD5 bytes empty value", []byte(""), md5.ErrMD5NotValid},
-		{"invalid MD5 bytes nil value", nil, md5.ErrMD5NotValid},
-		{"invalid MD5 bytes with unsupported character", []byte("d41d8cd98f00b204e9800998ecf8427g"), md5.ErrMD5NotValid},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			err := md5.IsMD5Bytes(tt.value)
-			if !errors.Is(err, tt.wantErr) {
-				t.Errorf("IsMD5Bytes() error = %v, want %v", err, tt.wantErr)
-			}
-		})
-	}
-}

@@ -32,26 +32,3 @@ func TestIsCEP(t *testing.T) {
 		})
 	}
 }
-
-func TestIsCEPBytes(t *testing.T) {
-	tests := []struct {
-		name    string
-		cep     []byte
-		wantErr error
-	}{
-		{"valid CEP bytes with hyphen", []byte("12345-678"), nil},
-		{"valid CEP bytes without formatting", []byte("12345678"), nil},
-		{"invalid CEP bytes empty value", []byte(""), cep.ErrCEPMustHave8Digits},
-		{"invalid CEP bytes nil value", nil, cep.ErrCEPMustHave8Digits},
-		{"invalid CEP bytes with letters", []byte("12345-67A"), cep.ErrCEPNotValid},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			err := cep.IsCEPBytes(tt.cep)
-			if !errors.Is(err, tt.wantErr) {
-				t.Errorf("IsCEPBytes() error = %v, want %v", err, tt.wantErr)
-			}
-		})
-	}
-}

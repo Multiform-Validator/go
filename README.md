@@ -102,31 +102,20 @@ import (
 ## Available Validators
 
 - `IsCPF`
-- `IsCPFBytes`
 - `IsCNPJ`
-- `IsCNPJBytes`
 - `IsEmail`
-- `IsEmailBytes`
 - `IsImage`
 - `GetOnlyEmail`
 - `GetOnlyEmails`
 - `IsCreditCard`
-- `IsCreditCardBytes`
 - `IsTelephone`
 - `IsEmpty`
-- `IsEmptyBytes`
 - `IsBlank`
-- `IsBlankBytes`
 - `IsAscii`
-- `IsAsciiBytes`
 - `IsBase64`
-- `IsBase64Bytes`
 - `IsCEP`
-- `IsCEPBytes`
 - `IsMD5`
-- `IsMD5Bytes`
 - `IsPort`
-- `IsPortBytes`
 - `IsPortNumber`
 - `CalculateCNPJCheckDigits`
 

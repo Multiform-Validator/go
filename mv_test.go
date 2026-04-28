@@ -21,16 +21,6 @@ func TestIsCPFFromRootPackage(t *testing.T) {
 	}
 }
 
-func TestIsCPFBytesFromRootPackage(t *testing.T) {
-	if err := IsCPFBytes([]byte("123.456.789-09")); err != nil {
-		t.Fatalf("IsCPFBytes() returned error for valid CPF: %v", err)
-	}
-
-	if err := IsCPFBytes([]byte("123.456.789-02")); err == nil {
-		t.Fatal("IsCPFBytes() expected error for invalid CPF, got nil")
-	}
-}
-
 func TestIsCNPJFromRootPackage(t *testing.T) {
 	if err := IsCNPJ("12.ABC.345/01DE-35"); err != nil {
 		t.Fatalf("IsCNPJ() returned error for valid CNPJ: %v", err)
@@ -41,16 +31,6 @@ func TestIsCNPJFromRootPackage(t *testing.T) {
 	}
 }
 
-func TestIsCNPJBytesFromRootPackage(t *testing.T) {
-	if err := IsCNPJBytes([]byte("12.ABC.345/01DE-35")); err != nil {
-		t.Fatalf("IsCNPJBytes() returned error for valid CNPJ: %v", err)
-	}
-
-	if err := IsCNPJBytes([]byte("12.ABC.345/01DE-34")); err == nil {
-		t.Fatal("IsCNPJBytes() expected error for invalid CNPJ, got nil")
-	}
-}
-
 func TestIsEmailFromRootPackage(t *testing.T) {
 	if err := IsEmail("user@example.com"); err != nil {
 		t.Fatalf("IsEmail() returned error for valid email: %v", err)
@@ -58,16 +38,6 @@ func TestIsEmailFromRootPackage(t *testing.T) {
 
 	if err := IsEmail("user.example.com"); err == nil {
 		t.Fatal("IsEmail() expected error for invalid email, got nil")
-	}
-}
-
-func TestIsEmailBytesFromRootPackage(t *testing.T) {
-	if err := IsEmailBytes([]byte("user@example.com")); err != nil {
-		t.Fatalf("IsEmailBytes() returned error for valid email: %v", err)
-	}
-
-	if err := IsEmailBytes([]byte("user.example.com")); err == nil {
-		t.Fatal("IsEmailBytes() expected error for invalid email, got nil")
 	}
 }
 
@@ -128,16 +98,6 @@ func TestIsCreditCardFromRootPackage(t *testing.T) {
 	}
 }
 
-func TestIsCreditCardBytesFromRootPackage(t *testing.T) {
-	if err := IsCreditCardBytes([]byte("4111 1111 1111 1111")); err != nil {
-		t.Fatalf("IsCreditCardBytes() returned error for valid credit card: %v", err)
-	}
-
-	if err := IsCreditCardBytes([]byte("4111 1111 1111 1112")); err == nil {
-		t.Fatal("IsCreditCardBytes() expected error for invalid credit card, got nil")
-	}
-}
-
 func TestIsTelephoneFromRootPackage(t *testing.T) {
 	if err := IsTelephone("+55 11 91234-5678", "BR"); err != nil {
 		t.Fatalf("IsTelephone() returned error for valid telephone: %v", err)
@@ -158,16 +118,6 @@ func TestIsEmptyFromRootPackage(t *testing.T) {
 	}
 }
 
-func TestIsEmptyBytesFromRootPackage(t *testing.T) {
-	if err := IsEmptyBytes(nil); err != nil {
-		t.Fatalf("IsEmptyBytes() returned error for nil bytes: %v", err)
-	}
-
-	if err := IsEmptyBytes([]byte(" ")); err == nil {
-		t.Fatal("IsEmptyBytes() expected error for non-empty bytes, got nil")
-	}
-}
-
 func TestIsBlankFromRootPackage(t *testing.T) {
 	if err := IsBlank("   "); err != nil {
 		t.Fatalf("IsBlank() returned error for blank value: %v", err)
@@ -175,16 +125,6 @@ func TestIsBlankFromRootPackage(t *testing.T) {
 
 	if err := IsBlank("value"); err == nil {
 		t.Fatal("IsBlank() expected error for non-blank value, got nil")
-	}
-}
-
-func TestIsBlankBytesFromRootPackage(t *testing.T) {
-	if err := IsBlankBytes([]byte("   ")); err != nil {
-		t.Fatalf("IsBlankBytes() returned error for blank bytes: %v", err)
-	}
-
-	if err := IsBlankBytes([]byte("value")); err == nil {
-		t.Fatal("IsBlankBytes() expected error for non-blank bytes, got nil")
 	}
 }
 
@@ -198,16 +138,6 @@ func TestIsAsciiFromRootPackage(t *testing.T) {
 	}
 }
 
-func TestIsAsciiBytesFromRootPackage(t *testing.T) {
-	if err := IsAsciiBytes([]byte("Hello 123!")); err != nil {
-		t.Fatalf("IsAsciiBytes() returned error for valid ASCII bytes: %v", err)
-	}
-
-	if err := IsAsciiBytes([]byte{0x48, 0x80}); err == nil {
-		t.Fatal("IsAsciiBytes() expected error for invalid ASCII bytes, got nil")
-	}
-}
-
 func TestIsBase64FromRootPackage(t *testing.T) {
 	if err := IsBase64("SGVsbG8="); err != nil {
 		t.Fatalf("IsBase64() returned error for valid base64: %v", err)
@@ -215,16 +145,6 @@ func TestIsBase64FromRootPackage(t *testing.T) {
 
 	if err := IsBase64("not base64!"); err == nil {
 		t.Fatal("IsBase64() expected error for invalid base64, got nil")
-	}
-}
-
-func TestIsBase64BytesFromRootPackage(t *testing.T) {
-	if err := IsBase64Bytes([]byte("SGVsbG8=")); err != nil {
-		t.Fatalf("IsBase64Bytes() returned error for valid base64 bytes: %v", err)
-	}
-
-	if err := IsBase64Bytes([]byte("not base64!")); err == nil {
-		t.Fatal("IsBase64Bytes() expected error for invalid base64 bytes, got nil")
 	}
 }
 
@@ -238,16 +158,6 @@ func TestIsCEPFromRootPackage(t *testing.T) {
 	}
 }
 
-func TestIsCEPBytesFromRootPackage(t *testing.T) {
-	if err := IsCEPBytes([]byte("12345-678")); err != nil {
-		t.Fatalf("IsCEPBytes() returned error for valid CEP bytes: %v", err)
-	}
-
-	if err := IsCEPBytes([]byte("12345-67A")); err == nil {
-		t.Fatal("IsCEPBytes() expected error for invalid CEP bytes, got nil")
-	}
-}
-
 func TestIsMD5FromRootPackage(t *testing.T) {
 	if err := IsMD5("d41d8cd98f00b204e9800998ecf8427e"); err != nil {
 		t.Fatalf("IsMD5() returned error for valid MD5: %v", err)
@@ -258,16 +168,6 @@ func TestIsMD5FromRootPackage(t *testing.T) {
 	}
 }
 
-func TestIsMD5BytesFromRootPackage(t *testing.T) {
-	if err := IsMD5Bytes([]byte("d41d8cd98f00b204e9800998ecf8427e")); err != nil {
-		t.Fatalf("IsMD5Bytes() returned error for valid MD5 bytes: %v", err)
-	}
-
-	if err := IsMD5Bytes([]byte("d41d8cd98f00b204e9800998ecf8427g")); err == nil {
-		t.Fatal("IsMD5Bytes() expected error for invalid MD5 bytes, got nil")
-	}
-}
-
 func TestIsPortFromRootPackage(t *testing.T) {
 	if err := IsPort("8080"); err != nil {
 		t.Fatalf("IsPort() returned error for valid port: %v", err)
@@ -275,16 +175,6 @@ func TestIsPortFromRootPackage(t *testing.T) {
 
 	if err := IsPort("65536"); err == nil {
 		t.Fatal("IsPort() expected error for invalid port, got nil")
-	}
-}
-
-func TestIsPortBytesFromRootPackage(t *testing.T) {
-	if err := IsPortBytes([]byte("8080")); err != nil {
-		t.Fatalf("IsPortBytes() returned error for valid port bytes: %v", err)
-	}
-
-	if err := IsPortBytes([]byte("65536")); err == nil {
-		t.Fatal("IsPortBytes() expected error for invalid port bytes, got nil")
 	}
 }
 

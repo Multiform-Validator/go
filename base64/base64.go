@@ -19,10 +19,6 @@ func IsBase64(value string) error {
 	return nil
 }
 
-func IsBase64Bytes(value []byte) error {
-	return IsBase64(string(value))
-}
-
 func hasWhitespace(value string) bool {
 	for i := 0; i < len(value); i++ {
 		if value[i] == ' ' || value[i] == '\t' || value[i] == '\n' || value[i] == '\r' {

@@ -18,36 +18,7 @@ func IsCPF(cpf string) error {
 	return validateCPFDigits(digits)
 }
 
-func IsCPFBytes(cpf []byte) error {
-	digits, count := extractDigitsFromBytes(cpf)
-	if count != 11 {
-		return ErrCPFMustHave11Digits
-	}
-
-	return validateCPFDigits(digits)
-}
-
 func extractDigitsFromString(input string) ([11]byte, int) {
-	var digits [11]byte
-	count := 0
-	for i := 0; i < len(input); i++ {
-		c := input[i]
-		if c < '0' || c > '9' {
-			continue
-		}
-
-		if count == 11 {
-			return digits, count + 1
-		}
-
-		digits[count] = c - '0'
-		count++
-	}
-
-	return digits, count
-}
-
-func extractDigitsFromBytes(input []byte) ([11]byte, int) {
 	var digits [11]byte
 	count := 0
 	for i := 0; i < len(input); i++ {

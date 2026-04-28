@@ -40,10 +40,6 @@ func IsCNPJ(cnpj string) error {
 	return nil
 }
 
-func IsCNPJBytes(cnpj []byte) error {
-	return IsCNPJ(string(cnpj))
-}
-
 func CalculateCNPJCheckDigits(baseCNPJ string) (string, error) {
 	baseCNPJ = removeFormattingCharacters(baseCNPJ)
 	if !isCNPJFormationValidWithoutDV(baseCNPJ) {

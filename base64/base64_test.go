@@ -33,25 +33,3 @@ func TestIsBase64(t *testing.T) {
 		})
 	}
 }
-
-func TestIsBase64Bytes(t *testing.T) {
-	tests := []struct {
-		name    string
-		value   []byte
-		wantErr error
-	}{
-		{"valid base64 bytes", []byte("SGVsbG8="), nil},
-		{"invalid base64 bytes empty value", []byte(""), base64.ErrBase64NotValid},
-		{"invalid base64 bytes nil value", nil, base64.ErrBase64NotValid},
-		{"invalid base64 bytes with tab", []byte("SGVs\tbG8="), base64.ErrBase64NotValid},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			err := base64.IsBase64Bytes(tt.value)
-			if !errors.Is(err, tt.wantErr) {
-				t.Errorf("IsBase64Bytes() error = %v, want %v", err, tt.wantErr)
-			}
-		})
-	}
-}

@@ -26,10 +26,6 @@ func IsPort(port string) error {
 	return validatePortRange(value)
 }
 
-func IsPortBytes(port []byte) error {
-	return IsPort(string(port))
-}
-
 func IsPortNumber(port int) error {
 	return validatePortRange(port)
 }

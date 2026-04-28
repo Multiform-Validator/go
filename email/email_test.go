@@ -185,27 +185,3 @@ func TestGetOnlyEmails(t *testing.T) {
 		})
 	}
 }
-
-func TestIsEmailBytes(t *testing.T) {
-	tests := []struct {
-		name    string
-		email   []byte
-		wantErr error
-	}{
-		{"valid email bytes", []byte("user@example.com"), nil},
-		{"valid email bytes with subdomain", []byte("first.last@mail.example.com"), nil},
-		{"invalid email bytes empty value", []byte(""), email.ErrEmailNotValid},
-		{"invalid email bytes nil value", nil, email.ErrEmailNotValid},
-		{"invalid email bytes without at sign", []byte("user.example.com"), email.ErrEmailNotValid},
-		{"invalid email bytes with consecutive local dots", []byte("first..last@example.com"), email.ErrEmailNotValid},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			err := email.IsEmailBytes(tt.email)
-			if !errors.Is(err, tt.wantErr) {
-				t.Errorf("IsEmailBytes() error = %v, want %v", err, tt.wantErr)
-			}
-		})
-	}
-}
