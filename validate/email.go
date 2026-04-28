@@ -57,14 +57,14 @@ type EmailOptions struct {
 	// ".br" both accept "user@example.com.br".
 	Country string
 
-	// ValidDomains restricts the address to the package default domain allowlist
-	// when true, including common providers such as gmail.com and outlook.com.
-	ValidDomains bool
-
 	// ValidDomainsList restricts the address to these domains instead of the
 	// default allowlist. Domains are case-insensitive, surrounding spaces are
 	// ignored, and the leading "@" is optional.
 	ValidDomainsList []string
+
+	// ValidDomains restricts the address to the package default domain allowlist
+	// when true, including common providers such as gmail.com and outlook.com.
+	ValidDomains bool
 }
 
 func Email(value string, options ...EmailOptions) error {

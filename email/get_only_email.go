@@ -24,10 +24,6 @@ var emailCandidatePattern = regexp.MustCompile("[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+
 //	)
 //	// []string{"john@gmail.com"}
 type GetOnlyEmailOptions struct {
-	// CleanDomain trims candidates to a known domain suffix such as .com,
-	// .com.br, .net, .org, .io, .pt, or .br.
-	CleanDomain bool
-
 	// CleanDomains trims candidates to the longest matching custom domain.
 	// When this slice is not empty it takes precedence over CleanDomain.
 	//
@@ -35,6 +31,10 @@ type GetOnlyEmailOptions struct {
 	//		email.GetOnlyEmailOptions{CleanDomains: []string{".dev"}})
 	//	// "user@company.dev"
 	CleanDomains []string
+
+	// CleanDomain trims candidates to a known domain suffix such as .com,
+	// .com.br, .net, .org, .io, .pt, or .br.
+	CleanDomain bool
 
 	// RepeatEmail keeps duplicate addresses in the result. When false,
 	// duplicates are removed after optional domain cleaning.
