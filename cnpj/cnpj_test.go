@@ -1,8 +1,10 @@
-package cnpj
+package cnpj_test
 
 import (
 	"errors"
 	"testing"
+
+	"github.com/Multiform-Validator/go/cnpj"
 )
 
 func TestIsCNPJ(t *testing.T) {
@@ -20,25 +22,25 @@ func TestIsCNPJ(t *testing.T) {
 		{"valid numeric CNPJ with alternative formatting", "69.228.768.0159-00", nil},
 		{"valid numeric CNPJ corrected from legacy fixture", "72.501.263/0001-95", nil},
 		{"valid numeric CNPJ with first check digit as zero", "00000000000604", nil},
-		{"invalid CNPJ with less than 14 characters", "12.ABC.345/01DE-3", ErrCNPJMustHave14Characters},
-		{"invalid CNPJ with more than 14 characters", "12.ABC.345/01DE-350", ErrCNPJMustHave14Characters},
-		{"invalid CNPJ with invalid checksum", "12ABC34501DE34", ErrCNPJNotValid},
-		{"invalid numeric CNPJ with invalid checksum", "12.345.678/0001-91", ErrCNPJNotValid},
-		{"invalid numeric CNPJ with invalid verifier digits", "12.345.678/0001-00", ErrCNPJNotValid},
-		{"invalid numeric CNPJ from legacy fixture", "72.501.263/0001-40", ErrCNPJNotValid},
-		{"invalid CNPJ with lowercase letters", "12abc34501DE35", ErrCNPJNotValid},
-		{"invalid CNPJ with letter as check digit", "12ABC34501DEA5", ErrCNPJNotValid},
-		{"invalid numeric CNPJ with letter as check digit", "72.501.263/0001-4A", ErrCNPJNotValid},
-		{"invalid CNPJ with embedded whitespace", "12.ABC.345/01 DE-35", ErrCNPJMustHave14Characters},
-		{"invalid CNPJ with unsupported formatting character", "12ABC34501D@35", ErrCNPJNotValid},
-		{"invalid CNPJ with only zeroes", "00000000000000", ErrCNPJNotValid},
-		{"invalid numeric CNPJ with all digits repeated", "11.111.111/1111-11", ErrCNPJNotValid},
-		{"invalid CNPJ empty value", "", ErrCNPJMustHave14Characters},
+		{"invalid CNPJ with less than 14 characters", "12.ABC.345/01DE-3", cnpj.ErrCNPJMustHave14Characters},
+		{"invalid CNPJ with more than 14 characters", "12.ABC.345/01DE-350", cnpj.ErrCNPJMustHave14Characters},
+		{"invalid CNPJ with invalid checksum", "12ABC34501DE34", cnpj.ErrCNPJNotValid},
+		{"invalid numeric CNPJ with invalid checksum", "12.345.678/0001-91", cnpj.ErrCNPJNotValid},
+		{"invalid numeric CNPJ with invalid verifier digits", "12.345.678/0001-00", cnpj.ErrCNPJNotValid},
+		{"invalid numeric CNPJ from legacy fixture", "72.501.263/0001-40", cnpj.ErrCNPJNotValid},
+		{"invalid CNPJ with lowercase letters", "12abc34501DE35", cnpj.ErrCNPJNotValid},
+		{"invalid CNPJ with letter as check digit", "12ABC34501DEA5", cnpj.ErrCNPJNotValid},
+		{"invalid numeric CNPJ with letter as check digit", "72.501.263/0001-4A", cnpj.ErrCNPJNotValid},
+		{"invalid CNPJ with embedded whitespace", "12.ABC.345/01 DE-35", cnpj.ErrCNPJMustHave14Characters},
+		{"invalid CNPJ with unsupported formatting character", "12ABC34501D@35", cnpj.ErrCNPJNotValid},
+		{"invalid CNPJ with only zeroes", "00000000000000", cnpj.ErrCNPJNotValid},
+		{"invalid numeric CNPJ with all digits repeated", "11.111.111/1111-11", cnpj.ErrCNPJNotValid},
+		{"invalid CNPJ empty value", "", cnpj.ErrCNPJMustHave14Characters},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := IsCNPJ(tt.cnpj)
+			err := cnpj.IsCNPJ(tt.cnpj)
 			if !errors.Is(err, tt.wantErr) {
 				t.Errorf("IsCNPJ() error = %v, want %v", err, tt.wantErr)
 			}
@@ -70,14 +72,14 @@ func TestCalculateCNPJCheckDigits(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := CalculateCNPJCheckDigits(tt.base)
+			got, err := cnpj.CalculateCNPJCheckDigits(tt.base)
 			if (err != nil) != tt.wantErr {
 				t.Fatalf("CalculateCNPJCheckDigits() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
 			if tt.wantErr {
-				if !errors.Is(err, ErrCNPJBaseNotValid) {
-					t.Fatalf("CalculateCNPJCheckDigits() error = %v, want %v", err, ErrCNPJBaseNotValid)
+				if !errors.Is(err, cnpj.ErrCNPJBaseNotValid) {
+					t.Fatalf("CalculateCNPJCheckDigits() error = %v, want %v", err, cnpj.ErrCNPJBaseNotValid)
 				}
 				return
 			}
