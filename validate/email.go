@@ -33,10 +33,37 @@ var defaultValidEmailDomains = []string{
 	"@protonmail.ch",
 }
 
+// EmailOptions configures the stricter email validator.
+//
+// The zero value validates the email format, trims surrounding whitespace, and
+// limits the address to 400 characters.
+//
+//	err := validate.Email("user@example.com")
+//
+// Combine fields when the application has stricter rules:
+//
+//	err := validate.Email("user@company.dev", validate.EmailOptions{
+//		MaxLength:        80,
+//		ValidDomainsList: []string{"company.dev"},
+//	})
 type EmailOptions struct {
-	MaxLength        int
-	Country          string
-	ValidDomains     bool
+	// MaxLength sets the maximum accepted length after trimming spaces. Zero
+	// means 400; negative values return ErrEmailMaxLengthNotValid.
+	MaxLength int
+
+	// Country requires the email to end with the given country suffix.
+	//
+	// The value is case-insensitive and may include the leading dot: "br" and
+	// ".br" both accept "user@example.com.br".
+	Country string
+
+	// ValidDomains restricts the address to the package default domain allowlist
+	// when true, including common providers such as gmail.com and outlook.com.
+	ValidDomains bool
+
+	// ValidDomainsList restricts the address to these domains instead of the
+	// default allowlist. Domains are case-insensitive, surrounding spaces are
+	// ignored, and the leading "@" is optional.
 	ValidDomainsList []string
 }
 

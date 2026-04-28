@@ -16,13 +16,44 @@ var (
 	ErrPasswordLengthOptionsInvalid = errors.New("password length options are invalid")
 )
 
+// PasswordOptions configures length and character requirements for Password.
+//
+// The zero value only requires a non-empty password: MinLength defaults to 1
+// and MaxLength defaults to no limit.
+//
+//	err := validate.Password("a")
+//
+// Configure the fields for stricter signup rules:
+//
+//	err := validate.Password("MyP@ssw0rd", validate.PasswordOptions{
+//		MinLength:          8,
+//		MaxLength:          64,
+//		RequireUppercase:   true,
+//		RequireSpecialChar: true,
+//		RequireNumber:      true,
+//		RequireLetter:      true,
+//	})
 type PasswordOptions struct {
-	MinLength          int
-	MaxLength          int
-	RequireUppercase   bool
+	// MinLength sets the minimum number of bytes required. Zero means 1.
+	MinLength int
+
+	// MaxLength sets the maximum number of bytes allowed. Zero means unlimited.
+	MaxLength int
+
+	// RequireUppercase requires at least one Unicode uppercase character.
+	RequireUppercase bool
+
+	// RequireSpecialChar requires at least one of these ASCII characters:
+	// ! @ # $ % ^ & * ( ) , . ? " : { } | < >
+	//
+	// Underscore is not considered a special character by this validator.
 	RequireSpecialChar bool
-	RequireNumber      bool
-	RequireLetter      bool
+
+	// RequireNumber requires at least one Unicode digit.
+	RequireNumber bool
+
+	// RequireLetter requires at least one Unicode letter.
+	RequireLetter bool
 }
 
 func Password(value string, options ...PasswordOptions) error {

@@ -9,10 +9,36 @@ const NoEmailFound = "No email found"
 
 var emailCandidatePattern = regexp.MustCompile("[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9.-]+")
 
+// GetOnlyEmailOptions changes how emails are extracted from free-form text.
+//
+// By default, candidates are kept as found and duplicates are removed:
+//
+//	emails := email.GetOnlyEmails("a@site.com a@site.com")
+//	// []string{"a@site.com"}
+//
+// Use CleanDomain or CleanDomains when extra text may be glued to the domain:
+//
+//	emails := email.GetOnlyEmails(
+//		"contact john@gmail.comEXTRA",
+//		email.GetOnlyEmailOptions{CleanDomain: true},
+//	)
+//	// []string{"john@gmail.com"}
 type GetOnlyEmailOptions struct {
-	CleanDomain  bool
+	// CleanDomain trims candidates to a known domain suffix such as .com,
+	// .com.br, .net, .org, .io, .pt, or .br.
+	CleanDomain bool
+
+	// CleanDomains trims candidates to the longest matching custom domain.
+	// When this slice is not empty it takes precedence over CleanDomain.
+	//
+	//	email.GetOnlyEmail("user@company.devXYZ",
+	//		email.GetOnlyEmailOptions{CleanDomains: []string{".dev"}})
+	//	// "user@company.dev"
 	CleanDomains []string
-	RepeatEmail  bool
+
+	// RepeatEmail keeps duplicate addresses in the result. When false,
+	// duplicates are removed after optional domain cleaning.
+	RepeatEmail bool
 }
 
 func GetOnlyEmail(value string, options ...GetOnlyEmailOptions) string {
