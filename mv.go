@@ -51,12 +51,24 @@ func IsEmpty(value string) error {
 	return text.IsEmpty(value)
 }
 
+func IsEmptyBytes(value []byte) error {
+	return text.IsEmptyBytes(value)
+}
+
 func IsBlank(value string) error {
 	return text.IsBlank(value)
 }
 
+func IsBlankBytes(value []byte) error {
+	return text.IsBlankBytes(value)
+}
+
 func IsAscii(value string) error {
 	return ascii.IsAscii(value)
+}
+
+func IsAsciiBytes(value []byte) error {
+	return ascii.IsAsciiBytes(value)
 }
 
 func IsBase64(value string) error {

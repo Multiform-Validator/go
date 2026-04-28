@@ -110,8 +110,11 @@ import (
 - `IsCreditCard`
 - `IsTelephone`
 - `IsEmpty`
+- `IsEmptyBytes`
 - `IsBlank`
+- `IsBlankBytes`
 - `IsAscii`
+- `IsAsciiBytes`
 - `IsBase64`
 - `IsCEP`
 - `IsMD5`

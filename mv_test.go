@@ -118,6 +118,16 @@ func TestIsEmptyFromRootPackage(t *testing.T) {
 	}
 }
 
+func TestIsEmptyBytesFromRootPackage(t *testing.T) {
+	if err := IsEmptyBytes(nil); err != nil {
+		t.Fatalf("IsEmptyBytes() returned error for nil bytes: %v", err)
+	}
+
+	if err := IsEmptyBytes([]byte(" ")); err == nil {
+		t.Fatal("IsEmptyBytes() expected error for non-empty bytes, got nil")
+	}
+}
+
 func TestIsBlankFromRootPackage(t *testing.T) {
 	if err := IsBlank("   "); err != nil {
 		t.Fatalf("IsBlank() returned error for blank value: %v", err)
@@ -128,6 +138,16 @@ func TestIsBlankFromRootPackage(t *testing.T) {
 	}
 }
 
+func TestIsBlankBytesFromRootPackage(t *testing.T) {
+	if err := IsBlankBytes([]byte("   ")); err != nil {
+		t.Fatalf("IsBlankBytes() returned error for blank bytes: %v", err)
+	}
+
+	if err := IsBlankBytes([]byte("value")); err == nil {
+		t.Fatal("IsBlankBytes() expected error for non-blank bytes, got nil")
+	}
+}
+
 func TestIsAsciiFromRootPackage(t *testing.T) {
 	if err := IsAscii("Hello 123!"); err != nil {
 		t.Fatalf("IsAscii() returned error for valid ASCII: %v", err)
@@ -135,6 +155,16 @@ func TestIsAsciiFromRootPackage(t *testing.T) {
 
 	if err := IsAscii("olá"); err == nil {
 		t.Fatal("IsAscii() expected error for invalid ASCII, got nil")
+	}
+}
+
+func TestIsAsciiBytesFromRootPackage(t *testing.T) {
+	if err := IsAsciiBytes([]byte("Hello 123!")); err != nil {
+		t.Fatalf("IsAsciiBytes() returned error for valid ASCII bytes: %v", err)
+	}
+
+	if err := IsAsciiBytes([]byte{0x48, 0x80}); err == nil {
+		t.Fatal("IsAsciiBytes() expected error for invalid ASCII bytes, got nil")
 	}
 }
 
