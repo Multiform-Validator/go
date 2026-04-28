@@ -109,6 +109,10 @@ func IsPortBytes(value []byte) error {
 	return port.IsPortBytes(value)
 }
 
+func IsPortNumber(value int) error {
+	return port.IsPortNumber(value)
+}
+
 func CalculateCNPJCheckDigits(value string) (string, error) {
 	return cnpj.CalculateCNPJCheckDigits(value)
 }

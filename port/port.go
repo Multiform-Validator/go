@@ -23,15 +23,23 @@ func IsPort(port string) error {
 	}
 
 	value, _ := strconv.Atoi(port)
-	if value < minPort || value > maxPort {
-		return ErrPortMustBeBetween1And65535
-	}
-
-	return nil
+	return validatePortRange(value)
 }
 
 func IsPortBytes(port []byte) error {
 	return IsPort(string(port))
+}
+
+func IsPortNumber(port int) error {
+	return validatePortRange(port)
+}
+
+func validatePortRange(port int) error {
+	if port < minPort || port > maxPort {
+		return ErrPortMustBeBetween1And65535
+	}
+
+	return nil
 }
 
 func hasOnlyDigits(value string) bool {

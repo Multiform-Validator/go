@@ -59,6 +59,10 @@ func main() {
 	if err := mv.IsPort("8080"); err != nil {
 		fmt.Println(err)
 	}
+
+	if err := mv.IsPortNumber(8080); err != nil {
+		fmt.Println(err)
+	}
 }
 ```
 
@@ -105,6 +109,7 @@ import (
 - `IsMD5Bytes`
 - `IsPort`
 - `IsPortBytes`
+- `IsPortNumber`
 - `CalculateCNPJCheckDigits`
 
 ## Planned Validators

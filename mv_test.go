@@ -250,6 +250,16 @@ func TestIsPortBytesFromRootPackage(t *testing.T) {
 	}
 }
 
+func TestIsPortNumberFromRootPackage(t *testing.T) {
+	if err := IsPortNumber(8080); err != nil {
+		t.Fatalf("IsPortNumber() returned error for valid port number: %v", err)
+	}
+
+	if err := IsPortNumber(65536); err == nil {
+		t.Fatal("IsPortNumber() expected error for invalid port number, got nil")
+	}
+}
+
 func TestCalculateCNPJCheckDigitsFromRootPackage(t *testing.T) {
 	got, err := CalculateCNPJCheckDigits("12ABC34501DE")
 	if err != nil {
