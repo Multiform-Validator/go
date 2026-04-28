@@ -8,8 +8,10 @@ import (
 	"github.com/Multiform-Validator/go/cpf"
 	"github.com/Multiform-Validator/go/creditcard"
 	"github.com/Multiform-Validator/go/email"
+	"github.com/Multiform-Validator/go/image"
 	"github.com/Multiform-Validator/go/md5"
 	"github.com/Multiform-Validator/go/port"
+	"github.com/Multiform-Validator/go/telephone"
 	"github.com/Multiform-Validator/go/text"
 )
 
@@ -37,6 +39,10 @@ func IsEmailBytes(value []byte) error {
 	return email.IsEmailBytes(value)
 }
 
+func IsImage(value []byte) error {
+	return image.IsImage(value)
+}
+
 func GetOnlyEmail(value string, options ...email.GetOnlyEmailOptions) string {
 	return email.GetOnlyEmail(value, options...)
 }
@@ -51,6 +57,10 @@ func IsCreditCard(value string) error {
 
 func IsCreditCardBytes(value []byte) error {
 	return creditcard.IsCreditCardBytes(value)
+}
+
+func IsTelephone(value string, countries ...string) error {
+	return telephone.IsTelephone(value, countries...)
 }
 
 func IsEmpty(value string) error {

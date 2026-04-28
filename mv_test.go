@@ -1,6 +1,10 @@
 package mv
 
 import (
+	"bytes"
+	stdimage "image"
+	"image/color"
+	"image/png"
 	"reflect"
 	"testing"
 
@@ -67,6 +71,30 @@ func TestIsEmailBytesFromRootPackage(t *testing.T) {
 	}
 }
 
+func TestIsImageFromRootPackage(t *testing.T) {
+	if err := IsImage(validPNGBytes(t)); err != nil {
+		t.Fatalf("IsImage() returned error for valid image: %v", err)
+	}
+
+	if err := IsImage([]byte("%PDF-1.7")); err == nil {
+		t.Fatal("IsImage() expected error for invalid image, got nil")
+	}
+}
+
+func validPNGBytes(t *testing.T) []byte {
+	t.Helper()
+
+	img := stdimage.NewRGBA(stdimage.Rect(0, 0, 1, 1))
+	img.Set(0, 0, color.RGBA{A: 255})
+
+	var buffer bytes.Buffer
+	if err := png.Encode(&buffer, img); err != nil {
+		t.Fatalf("png.Encode() error = %v", err)
+	}
+
+	return buffer.Bytes()
+}
+
 func TestGetOnlyEmailFromRootPackage(t *testing.T) {
 	got := GetOnlyEmail("Contact team: john@gmail.com, alexa@gmail.com")
 	if got != "john@gmail.com" {
@@ -107,6 +135,16 @@ func TestIsCreditCardBytesFromRootPackage(t *testing.T) {
 
 	if err := IsCreditCardBytes([]byte("4111 1111 1111 1112")); err == nil {
 		t.Fatal("IsCreditCardBytes() expected error for invalid credit card, got nil")
+	}
+}
+
+func TestIsTelephoneFromRootPackage(t *testing.T) {
+	if err := IsTelephone("+55 11 91234-5678", "BR"); err != nil {
+		t.Fatalf("IsTelephone() returned error for valid telephone: %v", err)
+	}
+
+	if err := IsTelephone("+91 51234 56789", "IN"); err == nil {
+		t.Fatal("IsTelephone() expected error for invalid telephone, got nil")
 	}
 }
 

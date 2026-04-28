@@ -1,8 +1,8 @@
 # Multiform Validator Go
 
-Go library made for validating several form fields and common values, such as email, telephone, password, CPF, CNPJ, credit card, image MIME type magic numbers, and much more.
+Go library made for validating several form fields and common values, such as email, telephone, password, CPF, CNPJ, credit card, real image bytes, and much more.
 
-This package is the Go version of Multiform Validator. It currently includes CPF, CNPJ, email, credit card, empty, blank, ASCII, Base64, CEP, MD5, and port validation, with more validators being added over time. The CNPJ validator supports both the old LEGACY numeric CNPJ format and the new alphanumeric CNPJ format, in accordance with the official Receita Federal / SERPRO specification.
+This package is the Go version of Multiform Validator. It currently includes CPF, CNPJ, email, image, credit card, telephone, empty, blank, ASCII, Base64, CEP, MD5, and port validation, with more validators being added over time. The CNPJ validator supports both the old LEGACY numeric CNPJ format and the new alphanumeric CNPJ format, in accordance with the official Receita Federal / SERPRO specification.
 
 ## Install
 
@@ -17,6 +17,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	mv "github.com/Multiform-Validator/go"
 )
@@ -38,9 +39,22 @@ func main() {
 		fmt.Println(err)
 	}
 
+	imageBytes, err := os.ReadFile("avatar.png")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	if err := mv.IsImage(imageBytes); err != nil {
+		fmt.Println(err)
+	}
+
 	fmt.Println(mv.GetOnlyEmail("Contact team: joao@empresa.com, maria@empresa.com"))
 
 	if err := mv.IsCreditCard("4111 1111 1111 1111"); err != nil {
+		fmt.Println(err)
+	}
+
+	if err := mv.IsTelephone("+55 11 91234-5678", "BR"); err != nil {
 		fmt.Println(err)
 	}
 
@@ -77,8 +91,10 @@ import (
 	"github.com/Multiform-Validator/go/cpf"
 	"github.com/Multiform-Validator/go/creditcard"
 	"github.com/Multiform-Validator/go/email"
+	"github.com/Multiform-Validator/go/image"
 	"github.com/Multiform-Validator/go/md5"
 	"github.com/Multiform-Validator/go/port"
+	"github.com/Multiform-Validator/go/telephone"
 	"github.com/Multiform-Validator/go/text"
 )
 ```
@@ -91,10 +107,12 @@ import (
 - `IsCNPJBytes`
 - `IsEmail`
 - `IsEmailBytes`
+- `IsImage`
 - `GetOnlyEmail`
 - `GetOnlyEmails`
 - `IsCreditCard`
 - `IsCreditCardBytes`
+- `IsTelephone`
 - `IsEmpty`
 - `IsEmptyBytes`
 - `IsBlank`
@@ -112,13 +130,13 @@ import (
 - `IsPortNumber`
 - `CalculateCNPJCheckDigits`
 
+`IsTelephone` accepts an optional country argument. Current country-specific validation supports Brazil, United States, China, Japan, Germany, India, United Kingdom, France, Italy, Canada, and South Korea.
+
 ## Planned Validators
 
 Some validations are still missing from the Go package documentation and will be implemented soon:
 
-- Telephone
 - Password
-- Image MIME type magic numbers
 
 ## Development
 
