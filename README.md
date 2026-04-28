@@ -107,6 +107,14 @@ import (
 - `IsPortBytes`
 - `CalculateCNPJCheckDigits`
 
+## Planned Validators
+
+Some validations are still missing from the Go package documentation and will be implemented soon:
+
+- Telephone
+- Password
+- Image MIME type magic numbers
+
 ## Development
 
 ```bash
