@@ -116,6 +116,12 @@ import (
 )
 ```
 
+## Validator Packages
+
+Most validators follow the direct `Is*` style, such as `IsEmail`, `IsCPF`, and `IsPort`. These are simple checks for one specific value.
+
+The `validate` package is intentionally separate and works a little differently. It is for higher-level validators with options and composed rules, using the `validate.*` style, such as `validate.Email` and `validate.Password`.
+
 ## Available Validators
 
 - `IsCPF`
