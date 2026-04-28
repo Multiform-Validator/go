@@ -2,7 +2,7 @@
 
 Go library made for validating several form fields and common values, such as email, telephone, password, CPF, CNPJ, credit card, real image bytes, and much more.
 
-This package is the Go version of Multiform Validator. It currently includes CPF, CNPJ, email, image, credit card, telephone, empty, blank, ASCII, Base64, CEP, MD5, and port validation, with more validators being added over time. The CNPJ validator supports both the old LEGACY numeric CNPJ format and the new alphanumeric CNPJ format, in accordance with the official Receita Federal / SERPRO specification.
+This package is the Go version of Multiform Validator. It currently includes CPF, CNPJ, email, image, credit card, telephone, password, empty, blank, ASCII, Base64, CEP, MD5, port, and higher-level validation helpers, with more validators being added over time. The CNPJ validator supports both the old LEGACY numeric CNPJ format and the new alphanumeric CNPJ format, in accordance with the official Receita Federal / SERPRO specification.
 
 ## Install
 
@@ -20,6 +20,7 @@ import (
 	"os"
 
 	mv "github.com/Multiform-Validator/go"
+	"github.com/Multiform-Validator/go/validate"
 )
 
 func main() {
@@ -36,6 +37,21 @@ func main() {
 	}
 
 	if err := mv.IsEmail("user@example.com"); err != nil {
+		fmt.Println(err)
+	}
+
+	if err := validate.Email("user@gmail.com", validate.EmailOptions{ValidDomains: true}); err != nil {
+		fmt.Println(err)
+	}
+
+	if err := validate.Password("MyP@ssw0rd", validate.PasswordOptions{
+		MinLength:          8,
+		MaxLength:          20,
+		RequireUppercase:   true,
+		RequireSpecialChar: true,
+		RequireNumber:      true,
+		RequireLetter:      true,
+	}); err != nil {
 		fmt.Println(err)
 	}
 
@@ -96,6 +112,7 @@ import (
 	"github.com/Multiform-Validator/go/port"
 	"github.com/Multiform-Validator/go/telephone"
 	"github.com/Multiform-Validator/go/text"
+	"github.com/Multiform-Validator/go/validate"
 )
 ```
 
@@ -121,14 +138,14 @@ import (
 - `IsPort`
 - `IsPortNumber`
 - `CalculateCNPJCheckDigits`
+- `validate.Email`
+- `validate.Password`
 
 `IsTelephone` accepts an optional country argument. Current country-specific validation supports Brazil, United States, China, Japan, Germany, India, United Kingdom, France, Italy, Canada, and South Korea.
 
-## Planned Validators
+`validate.Email` provides higher-level email validation options inspired by the TypeScript package: max length, country suffix, default allowed domains, and custom allowed domains.
 
-Some validations are still missing from the Go package documentation and will be implemented soon:
-
-- Password
+`validate.Password` validates password length and optional uppercase, special character, number, and letter requirements.
 
 ## Development
 
