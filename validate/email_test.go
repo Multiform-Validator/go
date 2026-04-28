@@ -20,6 +20,9 @@ func TestEmail(t *testing.T) {
 		{"valid email with custom domain including at sign", "user@company.dev", []EmailOptions{{ValidDomainsList: []string{"@company.dev"}}}, nil},
 		{"valid email with custom domain without at sign", "user@company.dev", []EmailOptions{{ValidDomainsList: []string{"company.dev"}}}, nil},
 		{"valid email with custom domain and spaces", "user@company.dev", []EmailOptions{{ValidDomainsList: []string{" company.dev "}}}, nil},
+		{"valid email with uppercase custom domain option", "user@company.dev", []EmailOptions{{ValidDomainsList: []string{" COMPANY.DEV "}}}, nil},
+		{"valid email with uppercase value and default valid domains", "User@Gmail.com", []EmailOptions{{ValidDomains: true}}, nil},
+		{"valid email with padded country option", "user@example.com.br", []EmailOptions{{Country: "  BR  "}}, nil},
 		{"invalid email empty value", "", nil, ErrEmailEmpty},
 		{"invalid email blank value", "   ", nil, ErrEmailEmpty},
 		{"invalid email format", "user.example.com", nil, ErrEmailNotValid},
@@ -27,6 +30,7 @@ func TestEmail(t *testing.T) {
 		{"invalid email country", "user@example.com", []EmailOptions{{Country: "br"}}, ErrEmailCountryNotValid},
 		{"invalid default domain", "user@example.com", []EmailOptions{{ValidDomains: true}}, ErrEmailDomainNotAllowed},
 		{"invalid custom domain", "user@example.com", []EmailOptions{{ValidDomainsList: []string{"company.dev"}}}, ErrEmailDomainNotAllowed},
+		{"invalid custom domain with empty and non matching domains", "user@example.com", []EmailOptions{{ValidDomainsList: []string{"", "company.dev"}}}, ErrEmailDomainNotAllowed},
 		{"invalid max length", "user@example.com", []EmailOptions{{MaxLength: -1}}, ErrEmailMaxLengthNotValid},
 	}
 

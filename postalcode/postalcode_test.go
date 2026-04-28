@@ -16,6 +16,7 @@ func TestIsPostalCodeGeneric(t *testing.T) {
 		{"valid united states", "90210", nil},
 		{"valid canada", "M4B 1B3", nil},
 		{"valid united kingdom", "SW1A 1AA", nil},
+		{"valid netherlands numeric only", "1012", nil},
 		{"valid japan", "100-0001", nil},
 		{"valid brazil", "10045-123", nil},
 		{"invalid empty", "", postalcode.ErrPostalCodeNotValid},
@@ -42,9 +43,11 @@ func TestIsPostalCodeByCountry(t *testing.T) {
 	}{
 		{"valid brazil with hyphen", "10045-123", "BR", nil},
 		{"valid brazil without hyphen", "10045123", "Brasil", nil},
+		{"valid brazil with padded alias", "10045-123", "  bra  ", nil},
 		{"valid canada with space", "M4B 1B3", "CA", nil},
 		{"valid canada without space", "M4B1B3", "Canada", nil},
 		{"valid united kingdom", "SW1A 1AA", "UK", nil},
+		{"valid united kingdom with collapsed country spaces", "SW1A 1AA", " United   Kingdom ", nil},
 		{"valid united kingdom without space", "SW1A1AA", "United Kingdom", nil},
 		{"valid france", "75013", "FR", nil},
 		{"valid netherlands letters", "1012 AB", "NL", nil},
@@ -59,7 +62,10 @@ func TestIsPostalCodeByCountry(t *testing.T) {
 		{"valid united states with extension", "90210-1234", "US", nil},
 		{"valid united states with blank country uses generic", "90210", "   ", nil},
 		{"invalid brazil short", "10045-12", "BR", postalcode.ErrPostalCodeNotValid},
+		{"invalid brazil with dot", "10045.123", "BR", postalcode.ErrPostalCodeNotValid},
 		{"invalid canada format", "123 456", "CA", postalcode.ErrPostalCodeNotValid},
+		{"invalid united states extension too short", "90210-123", "US", postalcode.ErrPostalCodeNotValid},
+		{"valid netherlands without space before letters", "1012AB", "NL", nil},
 		{"invalid country", "90210", "AR", postalcode.ErrPostalCodeCountryNotSupported},
 	}
 

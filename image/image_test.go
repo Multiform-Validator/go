@@ -23,12 +23,16 @@ func TestIsImage(t *testing.T) {
 		{"valid png", mustEncodePNG(t), nil},
 		{"valid gif", mustEncodeGIF(t), nil},
 		{"invalid empty value", nil, mvimage.ErrImageNotValid},
+		{"invalid empty slice", []byte{}, mvimage.ErrImageNotValid},
 		{"invalid short bytes", []byte{0xFF, 0xD8}, mvimage.ErrImageNotValid},
 		{"invalid text bytes", []byte("hello"), mvimage.ErrImageNotValid},
+		{"invalid bmp bytes", []byte("BMfake-bitmap"), mvimage.ErrImageNotValid},
 		{"invalid pdf", []byte("%PDF-1.7"), mvimage.ErrImageNotValid},
 		{"invalid png signature only", []byte{0x89, 'P', 'N', 'G', 0x0D, 0x0A, 0x1A, 0x0A}, mvimage.ErrImageNotValid},
+		{"invalid png with corrupt payload", append([]byte{0x89, 'P', 'N', 'G', 0x0D, 0x0A, 0x1A, 0x0A}, []byte("corrupt")...), mvimage.ErrImageNotValid},
 		{"invalid jpeg signature only", []byte{0xFF, 0xD8, 0xFF, 0xE0}, mvimage.ErrImageNotValid},
 		{"invalid gif signature only", []byte("GIF89a"), mvimage.ErrImageNotValid},
+		{"invalid gif87a signature only", []byte("GIF87a"), mvimage.ErrImageNotValid},
 	}
 
 	for _, tt := range tests {

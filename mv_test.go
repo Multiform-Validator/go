@@ -262,3 +262,17 @@ func TestCalculateCNPJCheckDigitsFromRootPackage(t *testing.T) {
 		t.Fatal("CalculateCNPJCheckDigits() expected error for invalid CNPJ base, got nil")
 	}
 }
+
+func TestAdditionalRootPackageForwarderCases(t *testing.T) {
+	if err := IsBase64("SGVsbG8_"); err != nil {
+		t.Fatalf("IsBase64() returned error for valid URL-safe base64: %v", err)
+	}
+
+	if err := IsPostalCode("SW1A 1AA", " United   Kingdom "); err != nil {
+		t.Fatalf("IsPostalCode() returned error for normalized country alias: %v", err)
+	}
+
+	if got := IdentifyFlagCard("card 4111-1111-1111-1111"); got != "Visa" {
+		t.Fatalf("IdentifyFlagCard() = %q, want %q", got, "Visa")
+	}
+}

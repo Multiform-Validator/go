@@ -15,6 +15,7 @@ func TestIsEmpty(t *testing.T) {
 	}{
 		{"valid empty value", "", nil},
 		{"invalid value with spaces", "   ", text.ErrValueNotEmpty},
+		{"invalid value with null byte", "\x00", text.ErrValueNotEmpty},
 		{"invalid value with text", "value", text.ErrValueNotEmpty},
 	}
 
@@ -37,6 +38,7 @@ func TestIsEmptyBytes(t *testing.T) {
 		{"valid empty bytes", []byte(""), nil},
 		{"valid nil bytes", nil, nil},
 		{"invalid bytes with spaces", []byte("   "), text.ErrValueNotEmpty},
+		{"invalid bytes with null byte", []byte{0x00}, text.ErrValueNotEmpty},
 		{"invalid bytes with text", []byte("value"), text.ErrValueNotEmpty},
 	}
 
@@ -59,6 +61,7 @@ func TestIsBlank(t *testing.T) {
 		{"valid empty value", "", nil},
 		{"valid value with spaces", "   ", nil},
 		{"valid value with tabs and new lines", "\t\n ", nil},
+		{"valid value with unicode whitespace", "\u2003\u2009", nil},
 		{"invalid value with text", "value", text.ErrValueNotBlank},
 		{"invalid value with text and spaces", " value ", text.ErrValueNotBlank},
 	}
@@ -82,6 +85,8 @@ func TestIsBlankBytes(t *testing.T) {
 		{"valid empty bytes", []byte(""), nil},
 		{"valid nil bytes", nil, nil},
 		{"valid bytes with spaces", []byte("   "), nil},
+		{"valid bytes with unicode whitespace", []byte("\u2003"), nil},
+		{"invalid bytes with null byte", []byte{0x00}, text.ErrValueNotBlank},
 		{"invalid bytes with text", []byte("value"), text.ErrValueNotBlank},
 	}
 

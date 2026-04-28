@@ -14,6 +14,7 @@ func TestIsCNPJ(t *testing.T) {
 		{"valid alphanumeric CNPJ with formatting", "12.ABC.345/01DE-35", nil},
 		{"valid alphanumeric CNPJ without formatting", "12ABC34501DE35", nil},
 		{"valid alphanumeric CNPJ with surrounding spaces", " 12.ABC.345/01DE-35 ", nil},
+		{"valid alphanumeric CNPJ with tab surroundings", "\t12.ABC.345/01DE-35\n", nil},
 		{"valid numeric CNPJ with formatting", "04.252.011/0001-10", nil},
 		{"valid numeric CNPJ without formatting", "11222333000181", nil},
 		{"valid numeric CNPJ with alternative formatting", "69.228.768.0159-00", nil},
@@ -28,6 +29,7 @@ func TestIsCNPJ(t *testing.T) {
 		{"invalid CNPJ with lowercase letters", "12abc34501DE35", ErrCNPJNotValid},
 		{"invalid CNPJ with letter as check digit", "12ABC34501DEA5", ErrCNPJNotValid},
 		{"invalid numeric CNPJ with letter as check digit", "72.501.263/0001-4A", ErrCNPJNotValid},
+		{"invalid CNPJ with embedded whitespace", "12.ABC.345/01 DE-35", ErrCNPJMustHave14Characters},
 		{"invalid CNPJ with unsupported formatting character", "12ABC34501D@35", ErrCNPJNotValid},
 		{"invalid CNPJ with only zeroes", "00000000000000", ErrCNPJNotValid},
 		{"invalid numeric CNPJ with all digits repeated", "11.111.111/1111-11", ErrCNPJNotValid},
@@ -53,6 +55,7 @@ func TestCalculateCNPJCheckDigits(t *testing.T) {
 	}{
 		{"official alphanumeric example", "12ABC34501DE", "35", false},
 		{"official alphanumeric example with formatting", "12.ABC.345/01DE", "35", false},
+		{"official alphanumeric example with whitespace", "\n12.ABC.345/01DE\t", "35", false},
 		{"numeric base with formatting", "04.252.011/0001", "10", false},
 		{"numeric base without formatting", "112223330001", "81", false},
 		{"numeric base from legacy fixture", "725012630001", "95", false},
@@ -61,6 +64,7 @@ func TestCalculateCNPJCheckDigits(t *testing.T) {
 		{"invalid base with only zeroes", "000000000000", "", true},
 		{"invalid base with lowercase letters", "12abc34501DE", "", true},
 		{"invalid base with check digits included", "12ABC34501DE35", "", true},
+		{"invalid base too short after formatting", "12.ABC.345/01D", "", true},
 		{"invalid base with unsupported character", "12ABC34501D@", "", true},
 	}
 

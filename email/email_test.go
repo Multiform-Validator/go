@@ -17,6 +17,9 @@ func TestIsEmail(t *testing.T) {
 		{"valid email", "user@example.com", nil},
 		{"valid email from TypeScript fixture", "foo@bar.com", nil},
 		{"valid email with plus", "user+tag@example.com", nil},
+		{"valid email with underscore", "user_name@example.com", nil},
+		{"valid email with percent", "user%tag@example.com", nil},
+		{"valid email with hyphen in domain label", "user@mail-server.example.com", nil},
 		{"valid email with subdomain", "first.last@mail.example.com", nil},
 		{"valid email with country code tld", "foo@bar.com.br", nil},
 		{"valid email with uppercase letters", "Foo@Bar.com", nil},
@@ -40,6 +43,7 @@ func TestIsEmail(t *testing.T) {
 		{"invalid email with domain ending dot", "user@example.com.", email.ErrEmailNotValid},
 		{"invalid email with domain ending consecutive dots", "foo@bar.com..", email.ErrEmailNotValid},
 		{"invalid email with repeated domain label", "joaoaoao@gmail.com.com", email.ErrEmailNotValid},
+		{"invalid email with repeated domain label case insensitive", "user@mail.Example.example", email.ErrEmailNotValid},
 		{"invalid email with repeated country tld", "foo@bar.com.br.br", email.ErrEmailNotValid},
 		{"invalid email with repeated domain and country tld", "foo@bar.com.com.br", email.ErrEmailNotValid},
 		{"invalid email with repeated domain and repeated country tld", "foo@bar.com.com.br.br", email.ErrEmailNotValid},
@@ -52,6 +56,7 @@ func TestIsEmail(t *testing.T) {
 		{"invalid email with domain label ending hyphen", "user@example-.com", email.ErrEmailNotValid},
 		{"invalid email with domain label too long", "user@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.com", email.ErrEmailNotValid},
 		{"invalid email with unsupported domain character", "user@exa_mple.com", email.ErrEmailNotValid},
+		{"invalid email with domain label ending underscore", "user@example_.com", email.ErrEmailNotValid},
 		{"invalid email with domain special character", "foo@bar!com", email.ErrEmailNotValid},
 		{"invalid email with short tld", "user@example.c", email.ErrEmailNotValid},
 		{"invalid email with short tld from TypeScript fixture", "foo@bar.c", email.ErrEmailNotValid},
@@ -90,6 +95,7 @@ func TestIsEmail(t *testing.T) {
 		{"invalid email local starts with backslash", "\\foo@bar.com", email.ErrEmailNotValid},
 		{"invalid email local starts with pipe", "|foo@bar.com", email.ErrEmailNotValid},
 		{"invalid email with unsupported local special character", "foo!@bar.com", email.ErrEmailNotValid},
+		{"invalid email with non ASCII local part", "usuário@example.com", email.ErrEmailNotValid},
 	}
 
 	for _, tt := range tests {
@@ -143,6 +149,12 @@ func TestGetOnlyEmail(t *testing.T) {
 			"returns cleaned email with custom domains",
 			"Contact team:\talexa@google.custom",
 			[]email.GetOnlyEmailOptions{{CleanDomains: []string{".custom"}}},
+			"alexa@google.custom",
+		},
+		{
+			"custom clean domains take precedence over default clean domain flag",
+			"Contact team:\talexa@google.customEXTRA",
+			[]email.GetOnlyEmailOptions{{CleanDomain: true, CleanDomains: []string{".custom"}}},
 			"alexa@google.custom",
 		},
 		{
@@ -213,9 +225,21 @@ func TestGetOnlyEmails(t *testing.T) {
 			[]string{"john@gmail.com", "alexa@gmail.com"},
 		},
 		{
+			"deduplicates after cleaning domains",
+			"Contact team: john@gmail.comXTRA, john@gmail.comOTHER",
+			[]email.GetOnlyEmailOptions{{CleanDomains: []string{".com"}}},
+			[]string{"john@gmail.com"},
+		},
+		{
 			"skips invalid candidates",
 			"Contact team: invalid@-example.com valid@example.com",
 			nil,
+			[]string{"valid@example.com"},
+		},
+		{
+			"skips candidates with invalid cleaned domain",
+			"Contact team: invalid@-example.comX valid@example.comX",
+			[]email.GetOnlyEmailOptions{{CleanDomains: []string{".com"}}},
 			[]string{"valid@example.com"},
 		},
 		{

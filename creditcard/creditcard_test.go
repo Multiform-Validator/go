@@ -16,8 +16,10 @@ func TestIsCreditCard(t *testing.T) {
 		{"valid Visa credit card", "4111111111111111", nil},
 		{"valid Mastercard credit card", "5555555555554444", nil},
 		{"valid Amex credit card", "378282246310005", nil},
+		{"valid 13 digit Visa credit card", "4222222222222", nil},
 		{"valid credit card with spaces", "4111 1111 1111 1111", nil},
 		{"valid credit card with hyphens", "4111-1111-1111-1111", nil},
+		{"valid credit card with mixed separators", "4111-1111 1111-1111", nil},
 		{"invalid credit card empty value", "", creditcard.ErrCreditCardMustHaveBetween12And19Digits},
 		{"invalid credit card with less than 12 digits", "41111111111", creditcard.ErrCreditCardMustHaveBetween12And19Digits},
 		{"invalid credit card with more than 19 digits", "41111111111111111111", creditcard.ErrCreditCardMustHaveBetween12And19Digits},
@@ -25,6 +27,7 @@ func TestIsCreditCard(t *testing.T) {
 		{"invalid credit card repeated digits", "0000000000000000", creditcard.ErrCreditCardNotValid},
 		{"invalid credit card with unsupported character", "4111.1111.1111.1111", creditcard.ErrCreditCardNotValid},
 		{"invalid credit card with letters", "411111111111111A", creditcard.ErrCreditCardNotValid},
+		{"invalid credit card with tab separator", "4111\t1111\t1111\t1111", creditcard.ErrCreditCardNotValid},
 	}
 
 	for _, tt := range tests {

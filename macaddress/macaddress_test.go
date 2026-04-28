@@ -18,10 +18,14 @@ func TestIsMACAddress(t *testing.T) {
 		{"valid hyphen separated", "00-1A-2B-3C-4D-5E", nil},
 		{"valid dot separated", "001A.2B3C.4D5E", nil},
 		{"valid lowercase", "00:1a:2b:3c:4d:5e", nil},
+		{"valid mixed case", "00:1a:2B:3c:4D:5e", nil},
+		{"valid with ignored punctuation", "00_1A_2B_3C_4D_5E", nil},
 		{"invalid empty", "", macaddress.ErrMACAddressNotValid},
 		{"invalid short", "00:1A:2B:3C:4D", macaddress.ErrMACAddressNotValid},
+		{"invalid single digit group", "00:1A:2B:3C:4D:5", macaddress.ErrMACAddressNotValid},
 		{"invalid long", "00:1A:2B:3C:4D:5E:6F", macaddress.ErrMACAddressNotValid},
 		{"invalid non hex alpha", "00:1A:2B:3C:4D:ZZ", macaddress.ErrMACAddressNotValid},
+		{"invalid unicode letters are ignored and shorten value", "00:1A:2B:3C:4D:éé", macaddress.ErrMACAddressNotValid},
 	}
 
 	for _, tt := range tests {

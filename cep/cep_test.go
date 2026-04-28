@@ -16,10 +16,13 @@ func TestIsCEP(t *testing.T) {
 		{"valid CEP with hyphen", "12345-678", nil},
 		{"valid CEP without formatting", "12345678", nil},
 		{"valid CEP with surrounding spaces", " 12345-678 ", nil},
+		{"valid CEP with zeroes", "00000-000", nil},
 		{"invalid CEP empty value", "", cep.ErrCEPMustHave8Digits},
 		{"invalid CEP with less than 8 digits", "12345-67", cep.ErrCEPMustHave8Digits},
 		{"invalid CEP with more than 8 digits", "12345-6789", cep.ErrCEPMustHave8Digits},
 		{"invalid CEP with letters", "12345-67A", cep.ErrCEPNotValid},
+		{"invalid CEP with internal space", "12345 678", cep.ErrCEPNotValid},
+		{"invalid CEP with slash", "12345/678", cep.ErrCEPNotValid},
 		{"invalid CEP with unsupported formatting character", "12345.678", cep.ErrCEPNotValid},
 	}
 
