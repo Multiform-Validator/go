@@ -31,7 +31,7 @@ func IsCNPJ(cnpj string) error {
 
 	first := calculateDigitBytes(digits[:cnpjSizeWithoutDV])
 	second := calculateDigitBytesWithExtra(digits[:cnpjSizeWithoutDV], first)
-	if digits[cnpjSizeWithoutDV] != byte('0'+first) || digits[cnpjSizeWithoutDV+1] != byte('0'+second) {
+	if digits[cnpjSizeWithoutDV] != digitToByte(first) || digits[cnpjSizeWithoutDV+1] != digitToByte(second) {
 		return ErrCNPJNotValid
 	}
 
@@ -47,7 +47,7 @@ func CalculateCNPJCheckDigits(baseCNPJ string) (string, error) {
 	first := calculateDigit(baseCNPJ)
 	second := calculateDigitWithExtra(baseCNPJ, first)
 
-	return string([]byte{byte('0' + first), byte('0' + second)}), nil
+	return string([]byte{digitToByte(first), digitToByte(second)}), nil
 }
 
 func removeFormattingCharacters(cnpj string) string {
@@ -113,22 +113,11 @@ func isCNPJFormationValidWithoutDV(cnpj string) bool {
 		!hasOnlyZeroes(cnpj)
 }
 
-func isCNPJFormationValidWithDV(cnpj string) bool {
-	return len(cnpj) == cnpjSize &&
-		hasValidBaseFormation(cnpj[:cnpjSizeWithoutDV]) &&
-		hasOnlyDigits(cnpj[cnpjSizeWithoutDV:]) &&
-		!hasOnlyZeroes(cnpj)
-}
-
 func isCNPJFormationValidWithDVBytes(cnpj [cnpjSize]byte) bool {
 	return hasValidBaseFormationBytes(cnpj) &&
 		isDigit(cnpj[cnpjSizeWithoutDV]) &&
 		isDigit(cnpj[cnpjSizeWithoutDV+1]) &&
 		!hasOnlyZeroesBytes(cnpj)
-}
-
-func hasValidBaseFormation(cnpj string) bool {
-	return len(cnpj) == cnpjSizeWithoutDV && hasOnlyUppercaseLettersAndDigits(cnpj)
 }
 
 func hasValidBaseFormationBytes(cnpj [cnpjSize]byte) bool {
@@ -149,16 +138,6 @@ func hasOnlyUppercaseLettersAndDigits(value string) bool {
 		}
 
 		return false
-	}
-
-	return true
-}
-
-func hasOnlyDigits(value string) bool {
-	for i := 0; i < len(value); i++ {
-		if value[i] < '0' || value[i] > '9' {
-			return false
-		}
 	}
 
 	return true
@@ -190,6 +169,10 @@ func isUppercaseLetterOrDigit(value byte) bool {
 
 func isDigit(value byte) bool {
 	return value >= '0' && value <= '9'
+}
+
+func digitToByte(value int) byte {
+	return "0123456789"[value]
 }
 
 func calculateDigit(cnpj string) int {
