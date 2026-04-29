@@ -62,18 +62,18 @@ var countryAliases = map[string]string{
 }
 
 var countryRules = map[string]countryRule{
-	"br": {validate: isBrazilPostalCode},
-	"ca": {validate: isCanadaPostalCode},
-	"ch": {validate: isFourDigitPostalCode},
-	"de": {validate: isFiveDigitPostalCode},
-	"es": {validate: isFiveDigitPostalCode},
-	"fr": {validate: isFiveDigitPostalCode},
-	"gb": {validate: isUnitedKingdomPostalCode},
-	"it": {validate: isFiveDigitPostalCode},
-	"jp": {validate: isJapanPostalCode},
-	"nl": {validate: isNetherlandsPostalCode},
-	"us": {validate: isUnitedStatesPostalCode},
-	"za": {validate: isFourDigitPostalCode},
+	"br": brazilRule,
+	"ca": canadaRule,
+	"ch": switzerlandRule,
+	"de": germanyRule,
+	"es": spainRule,
+	"fr": franceRule,
+	"gb": unitedKingdomRule,
+	"it": italyRule,
+	"jp": japanRule,
+	"nl": netherlandsRule,
+	"us": unitedStatesRule,
+	"za": southAfricaRule,
 }
 
 func IsPostalCode(value string, countries ...string) error {
@@ -110,110 +110,6 @@ func isPostalCodeSupportedByAnyCountry(value string) bool {
 	}
 
 	return false
-}
-
-func isBrazilPostalCode(value string) bool {
-	if len(value) == 8 {
-		return hasOnlyDigits(value)
-	}
-
-	return len(value) == 9 &&
-		hasOnlyDigits(value[:5]) &&
-		value[5] == '-' &&
-		hasOnlyDigits(value[6:])
-}
-
-func isCanadaPostalCode(value string) bool {
-	if len(value) == 6 {
-		return isLetter(value[0]) &&
-			isDigit(value[1]) &&
-			isLetter(value[2]) &&
-			isDigit(value[3]) &&
-			isLetter(value[4]) &&
-			isDigit(value[5])
-	}
-
-	return len(value) == 7 &&
-		isLetter(value[0]) &&
-		isDigit(value[1]) &&
-		isLetter(value[2]) &&
-		(value[3] == ' ' || value[3] == '-') &&
-		isDigit(value[4]) &&
-		isLetter(value[5]) &&
-		isDigit(value[6])
-}
-
-func isUnitedKingdomPostalCode(value string) bool {
-	length := len(value)
-	if length < 5 || length > 8 {
-		return false
-	}
-
-	index := 0
-	if !isLetter(value[index]) {
-		return false
-	}
-	index++
-
-	if index < length && isLetter(value[index]) {
-		index++
-	}
-
-	if index >= length || !isDigit(value[index]) {
-		return false
-	}
-	index++
-
-	if index < length && isAlphaNumeric(value[index]) {
-		index++
-	}
-
-	if index < length && value[index] == ' ' {
-		index++
-	}
-
-	return index+3 == length &&
-		isDigit(value[index]) &&
-		isLetter(value[index+1]) &&
-		isLetter(value[index+2])
-}
-
-func isJapanPostalCode(value string) bool {
-	if len(value) == 7 {
-		return hasOnlyDigits(value)
-	}
-
-	return len(value) == 8 &&
-		hasOnlyDigits(value[:3]) &&
-		value[3] == '-' &&
-		hasOnlyDigits(value[4:])
-}
-
-func isNetherlandsPostalCode(value string) bool {
-	if len(value) == 4 {
-		return hasOnlyDigits(value)
-	}
-
-	if len(value) == 6 {
-		return hasOnlyDigits(value[:4]) && isLetter(value[4]) && isLetter(value[5])
-	}
-
-	return len(value) == 7 &&
-		hasOnlyDigits(value[:4]) &&
-		value[4] == ' ' &&
-		isLetter(value[5]) &&
-		isLetter(value[6])
-}
-
-func isUnitedStatesPostalCode(value string) bool {
-	if len(value) == 5 {
-		return hasOnlyDigits(value)
-	}
-
-	return len(value) == 10 &&
-		hasOnlyDigits(value[:5]) &&
-		value[5] == '-' &&
-		hasOnlyDigits(value[6:])
 }
 
 func isFourDigitPostalCode(value string) bool {
