@@ -7,6 +7,6 @@ var franceRule = countryRule{
 	prefixFunc: isFranceTelephonePrefixValid,
 }
 
-func isFranceTelephonePrefixValid(value string) bool {
+func isFranceTelephonePrefixValid(value []byte) bool {
 	return len(value) == 9 && value[0] >= '1' && value[0] <= '9'
 }

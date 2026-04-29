@@ -1,6 +1,7 @@
 package text
 
 import (
+	"bytes"
 	"errors"
 	"strings"
 )
@@ -35,5 +36,9 @@ func IsBlank(value string) error {
 }
 
 func IsBlankBytes(value []byte) error {
-	return IsBlank(string(value))
+	if len(bytes.TrimSpace(value)) != 0 {
+		return ErrValueNotBlank
+	}
+
+	return nil
 }

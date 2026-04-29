@@ -7,6 +7,6 @@ var southKoreaRule = countryRule{
 	prefixFunc: isSouthKoreaTelephonePrefixValid,
 }
 
-func isSouthKoreaTelephonePrefixValid(value string) bool {
+func isSouthKoreaTelephonePrefixValid(value []byte) bool {
 	return len(value) > 0 && value[0] >= '1' && value[0] <= '9'
 }

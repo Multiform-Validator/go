@@ -80,25 +80,29 @@ func isDomainValid(domain string) bool {
 		return false
 	}
 
-	labels := strings.Split(domain, ".")
-	if len(labels) < 2 {
+	labelCount := 0
+	labelStart := 0
+	lastLabelStart := 0
+	for i := 0; i <= len(domain); i++ {
+		if i < len(domain) && domain[i] != '.' {
+			continue
+		}
+
+		label := domain[labelStart:i]
+		if !isDomainLabelValid(label) || hasPreviousDomainLabel(domain, labelStart, i) {
+			return false
+		}
+
+		labelCount++
+		lastLabelStart = labelStart
+		labelStart = i + 1
+	}
+
+	if labelCount < 2 {
 		return false
 	}
 
-	seenLabels := make(map[string]struct{}, len(labels))
-	for _, label := range labels {
-		if !isDomainLabelValid(label) {
-			return false
-		}
-
-		normalizedLabel := strings.ToLower(label)
-		if _, ok := seenLabels[normalizedLabel]; ok {
-			return false
-		}
-		seenLabels[normalizedLabel] = struct{}{}
-	}
-
-	tld := labels[len(labels)-1]
+	tld := domain[lastLabelStart:]
 	if len(tld) < 2 {
 		return false
 	}
@@ -110,6 +114,44 @@ func isDomainValid(domain string) bool {
 	}
 
 	return true
+}
+
+func hasPreviousDomainLabel(domain string, start int, end int) bool {
+	previousStart := 0
+	for previousEnd := 0; previousEnd < start; previousEnd++ {
+		if domain[previousEnd] != '.' {
+			continue
+		}
+
+		if domainLabelsEqualFold(domain[previousStart:previousEnd], domain[start:end]) {
+			return true
+		}
+		previousStart = previousEnd + 1
+	}
+
+	return false
+}
+
+func domainLabelsEqualFold(a string, b string) bool {
+	if len(a) != len(b) {
+		return false
+	}
+
+	for i := 0; i < len(a); i++ {
+		if toLowerASCII(a[i]) != toLowerASCII(b[i]) {
+			return false
+		}
+	}
+
+	return true
+}
+
+func toLowerASCII(value byte) byte {
+	if value >= 'A' && value <= 'Z' {
+		return value + ('a' - 'A')
+	}
+
+	return value
 }
 
 func isDomainLabelValid(label string) bool {

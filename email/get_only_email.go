@@ -1,13 +1,12 @@
 package email
 
 import (
-	"regexp"
 	"strings"
 )
 
 const NoEmailFound = "No email found"
 
-var emailCandidatePattern = regexp.MustCompile("[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9.-]+")
+var defaultCleanDomains = []string{".com.br", ".com.io", ".com.pt", ".com", ".net", ".org", ".io", ".pt", ".br"}
 
 // GetOnlyEmailOptions changes how emails are extracted from free-form text.
 //
@@ -42,22 +41,41 @@ type GetOnlyEmailOptions struct {
 }
 
 func GetOnlyEmail(value string, options ...GetOnlyEmailOptions) string {
-	emails := GetOnlyEmails(value, options...)
-	if len(emails) == 0 {
-		return NoEmailFound
+	option := getOnlyEmailOption(options)
+	cleanDomains := getCleanDomains(option)
+
+	for start := 0; start < len(value); {
+		match, next, ok := nextEmailCandidate(value, start)
+		if !ok {
+			break
+		}
+		start = next
+
+		if len(cleanDomains) > 0 {
+			match = cleanEmailDomain(match, cleanDomains)
+		}
+
+		if IsEmail(match) == nil {
+			return match
+		}
 	}
 
-	return emails[0]
+	return NoEmailFound
 }
 
 func GetOnlyEmails(value string, options ...GetOnlyEmailOptions) []string {
 	option := getOnlyEmailOption(options)
 	cleanDomains := getCleanDomains(option)
-	matches := emailCandidatePattern.FindAllString(value, -1)
-	emails := make([]string, 0, len(matches))
-	seen := make(map[string]struct{}, len(matches))
+	emails := make([]string, 0)
+	seen := make(map[string]struct{})
 
-	for _, match := range matches {
+	for start := 0; start < len(value); {
+		match, next, ok := nextEmailCandidate(value, start)
+		if !ok {
+			break
+		}
+		start = next
+
 		if len(cleanDomains) > 0 {
 			match = cleanEmailDomain(match, cleanDomains)
 		}
@@ -79,6 +97,51 @@ func GetOnlyEmails(value string, options ...GetOnlyEmailOptions) []string {
 	return emails
 }
 
+func nextEmailCandidate(value string, start int) (string, int, bool) {
+	at := strings.IndexByte(value[start:], '@')
+	if at == -1 {
+		return "", len(value), false
+	}
+	at += start
+
+	left := at
+	for left > 0 && isEmailCandidateLocalCharacter(value[left-1]) {
+		left--
+	}
+
+	right := at + 1
+	for right < len(value) && isEmailCandidateDomainCharacter(value[right]) {
+		right++
+	}
+
+	if left == at || right == at+1 {
+		return "", at + 1, true
+	}
+
+	return value[left:right], right, true
+}
+
+func isEmailCandidateLocalCharacter(value byte) bool {
+	if (value >= 'A' && value <= 'Z') || (value >= 'a' && value <= 'z') || (value >= '0' && value <= '9') {
+		return true
+	}
+
+	switch value {
+	case '.', '!', '#', '$', '%', '&', '\'', '*', '+', '/', '=', '?', '^', '_', '`', '{', '|', '}', '~', '-':
+		return true
+	}
+
+	return false
+}
+
+func isEmailCandidateDomainCharacter(value byte) bool {
+	return (value >= 'A' && value <= 'Z') ||
+		(value >= 'a' && value <= 'z') ||
+		(value >= '0' && value <= '9') ||
+		value == '.' ||
+		value == '-'
+}
+
 func getOnlyEmailOption(options []GetOnlyEmailOptions) GetOnlyEmailOptions {
 	if len(options) == 0 {
 		return GetOnlyEmailOptions{}
@@ -93,7 +156,7 @@ func getCleanDomains(option GetOnlyEmailOptions) []string {
 	}
 
 	if option.CleanDomain {
-		return []string{".com.br", ".com.io", ".com.pt", ".com", ".net", ".org", ".io", ".pt", ".br"}
+		return defaultCleanDomains
 	}
 
 	return nil

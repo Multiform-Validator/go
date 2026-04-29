@@ -128,10 +128,8 @@ func hasValidEmailDomain(value string, option EmailOptions) bool {
 		return true
 	}
 
-	value = strings.ToLower(value)
 	for _, domain := range domains {
-		domain = normalizeEmailDomain(domain)
-		if domain != "" && strings.HasSuffix(value, domain) {
+		if hasEmailDomainSuffix(value, domain) {
 			return true
 		}
 	}
@@ -139,17 +137,20 @@ func hasValidEmailDomain(value string, option EmailOptions) bool {
 	return false
 }
 
-func normalizeEmailDomain(domain string) string {
-	domain = strings.ToLower(strings.TrimSpace(domain))
+func hasEmailDomainSuffix(value string, domain string) bool {
+	domain = strings.TrimSpace(domain)
 	if domain == "" {
-		return ""
+		return false
 	}
 
-	if !strings.HasPrefix(domain, "@") {
-		domain = "@" + domain
+	if domain[0] == '@' {
+		return len(value) >= len(domain) &&
+			strings.EqualFold(value[len(value)-len(domain):], domain)
 	}
 
-	return domain
+	return len(value) > len(domain) &&
+		value[len(value)-len(domain)-1] == '@' &&
+		strings.EqualFold(value[len(value)-len(domain):], domain)
 }
 
 func hasValidEmailCountry(value string, country string) bool {

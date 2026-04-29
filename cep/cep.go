@@ -35,8 +35,20 @@ func removeFormattingCharacters(cep string) (string, bool) {
 		return "", false
 	}
 
-	replacer := strings.NewReplacer("-", "")
-	return replacer.Replace(cep), true
+	for i := 0; i < len(cep); i++ {
+		if cep[i] == '-' {
+			cleaned := make([]byte, 0, len(cep)-1)
+			cleaned = append(cleaned, cep[:i]...)
+			for ; i < len(cep); i++ {
+				if cep[i] != '-' {
+					cleaned = append(cleaned, cep[i])
+				}
+			}
+			return string(cleaned), true
+		}
+	}
+
+	return cep, true
 }
 
 func hasOnlyDigits(value string) bool {
