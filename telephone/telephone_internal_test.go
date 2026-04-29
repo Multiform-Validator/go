@@ -29,6 +29,12 @@ func TestIsTelephoneInternalBranches(t *testing.T) {
 			value:   "+",
 			wantErr: ErrTelephoneNotValid,
 		},
+		{
+			name:      "uses long country alias fallback",
+			value:     "+55 11 91234-5678",
+			countries: []string{"Brazil"},
+			wantErr:   nil,
+		},
 	}
 
 	for _, tt := range tests {
@@ -38,6 +44,24 @@ func TestIsTelephoneInternalBranches(t *testing.T) {
 				t.Errorf("IsTelephone() error = %v, want %v", err, tt.wantErr)
 			}
 		})
+	}
+}
+
+func TestTelephoneHelperBranches(t *testing.T) {
+	if hasTelephonePrefix([]byte("1"), "55") {
+		t.Fatal("hasTelephonePrefix() expected false for short value")
+	}
+
+	if hasTelephonePrefix([]byte("65"), "55") {
+		t.Fatal("hasTelephonePrefix() expected false for mismatched prefix")
+	}
+
+	if value, ok := normalizeShortCountry("ca"); !ok || value != "ca" {
+		t.Fatalf("normalizeShortCountry() = %q, %v; want %q, %v", value, ok, "ca", true)
+	}
+
+	if _, ok := normalizeShortCountry("unknown"); ok {
+		t.Fatal("normalizeShortCountry() expected false for unsupported short country")
 	}
 }
 
