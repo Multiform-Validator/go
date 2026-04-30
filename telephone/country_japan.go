@@ -7,6 +7,6 @@ var japanRule = countryRule{
 	prefixFunc: isJapanTelephonePrefixValid,
 }
 
-func isJapanTelephonePrefixValid(value []byte) bool {
-	return len(value) > 0 && value[0] >= '1' && value[0] <= '9'
+func isJapanTelephonePrefixValid(value telephoneNumber, start int, length int) bool {
+	return length > 0 && value.digits[start] >= '1' && value.digits[start] <= '9'
 }

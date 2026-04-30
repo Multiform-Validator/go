@@ -7,6 +7,6 @@ var indiaRule = countryRule{
 	prefixFunc: isIndiaTelephonePrefixValid,
 }
 
-func isIndiaTelephonePrefixValid(value []byte) bool {
-	return len(value) == 10 && value[0] >= '6' && value[0] <= '9'
+func isIndiaTelephonePrefixValid(value telephoneNumber, start int, length int) bool {
+	return length == 10 && value.digits[start] >= '6' && value.digits[start] <= '9'
 }

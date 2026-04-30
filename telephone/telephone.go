@@ -14,7 +14,7 @@ type countryRule struct {
 	code       string
 	minLength  int
 	maxLength  int
-	prefixFunc func([]byte) bool
+	prefixFunc func(telephoneNumber, int, int) bool
 }
 
 type telephoneNumber struct {
@@ -104,8 +104,7 @@ func IsTelephone(value string, countries ...string) error {
 		return err
 	}
 
-	digits := number.digits[:number.length]
-	if len(digits) < 7 || len(digits) > 15 {
+	if number.length < 7 || number.length > 15 {
 		return ErrTelephoneNotValid
 	}
 
@@ -119,16 +118,18 @@ func IsTelephone(value string, countries ...string) error {
 	}
 
 	rule := countryRules[country]
-	nationalDigits := digits
-	if hasTelephonePrefix(digits, rule.code) && (hasInternationalPrefix || len(digits) > rule.maxLength) {
-		nationalDigits = digits[len(rule.code):]
+	nationalStart := 0
+	nationalLength := number.length
+	if hasTelephonePrefix(number, rule.code) && (hasInternationalPrefix || number.length > rule.maxLength) {
+		nationalStart = len(rule.code)
+		nationalLength -= nationalStart
 	}
 
-	if len(nationalDigits) < rule.minLength || len(nationalDigits) > rule.maxLength {
+	if nationalLength < rule.minLength || nationalLength > rule.maxLength {
 		return ErrTelephoneNotValid
 	}
 
-	if rule.prefixFunc != nil && !rule.prefixFunc(nationalDigits) {
+	if rule.prefixFunc != nil && !rule.prefixFunc(number, nationalStart, nationalLength) {
 		return ErrTelephoneNotValid
 	}
 
@@ -171,13 +172,13 @@ func normalizeTelephone(value string) (telephoneNumber, bool, error) {
 	return number, hasInternationalPrefix, nil
 }
 
-func hasTelephonePrefix(value []byte, prefix string) bool {
-	if len(value) < len(prefix) {
+func hasTelephonePrefix(value telephoneNumber, prefix string) bool {
+	if value.length < len(prefix) {
 		return false
 	}
 
 	for i := 0; i < len(prefix); i++ {
-		if value[i] != prefix[i] {
+		if value.digits[i] != prefix[i] {
 			return false
 		}
 	}
@@ -198,48 +199,122 @@ func normalizeCountry(country string) (string, bool) {
 }
 
 func normalizeShortCountry(country string) (string, bool) {
-	switch {
-	case equalFoldASCII(country, "br") || equalFoldASCII(country, "bra") || country == "55" || country == "+55":
-		return "br", true
-	case equalFoldASCII(country, "ca"):
-		return "ca", true
-	case equalFoldASCII(country, "cn") || equalFoldASCII(country, "chn") || country == "86" || country == "+86":
-		return "cn", true
-	case equalFoldASCII(country, "de") || equalFoldASCII(country, "deu") || country == "49" || country == "+49":
-		return "de", true
-	case equalFoldASCII(country, "fr") || equalFoldASCII(country, "fra") || country == "33" || country == "+33":
-		return "fr", true
-	case equalFoldASCII(country, "gb") || equalFoldASCII(country, "gbr") || equalFoldASCII(country, "uk") || country == "44" || country == "+44":
-		return "gb", true
-	case equalFoldASCII(country, "in") || equalFoldASCII(country, "ind") || country == "91" || country == "+91":
-		return "in", true
-	case equalFoldASCII(country, "it") || equalFoldASCII(country, "ita") || country == "39" || country == "+39":
-		return "it", true
-	case equalFoldASCII(country, "jp") || equalFoldASCII(country, "jpn") || country == "81" || country == "+81":
-		return "jp", true
-	case equalFoldASCII(country, "kr") || equalFoldASCII(country, "kor") || country == "82" || country == "+82":
-		return "kr", true
-	case equalFoldASCII(country, "us") || equalFoldASCII(country, "usa") || country == "1" || country == "+1":
-		return "us", true
-	default:
-		return "", false
+	switch len(country) {
+	case 1:
+		if country[0] == '1' {
+			return "us", true
+		}
+	case 2:
+		if country[0] == '+' && country[1] == '1' {
+			return "us", true
+		}
+		return normalizeTwoCharacterCountry(country)
+	case 3:
+		if country[0] == '+' {
+			return normalizeTelephoneCountryCode(country[1], country[2])
+		}
+		return normalizeThreeCharacterCountry(country)
 	}
+
+	return "", false
 }
 
-func equalFoldASCII(a string, b string) bool {
-	if len(a) != len(b) {
-		return false
+func normalizeTwoCharacterCountry(country string) (string, bool) {
+	if value, ok := normalizeTelephoneCountryCode(country[0], country[1]); ok {
+		return value, true
 	}
 
-	for i := 0; i < len(a); i++ {
-		c := a[i]
-		if c >= 'A' && c <= 'Z' {
-			c += 'a' - 'A'
-		}
-		if c != b[i] {
-			return false
-		}
+	first := toLowerASCII(country[0])
+	second := toLowerASCII(country[1])
+	switch {
+	case first == 'b' && second == 'r':
+		return "br", true
+	case first == 'c' && second == 'a':
+		return "ca", true
+	case first == 'c' && second == 'n':
+		return "cn", true
+	case first == 'd' && second == 'e':
+		return "de", true
+	case first == 'f' && second == 'r':
+		return "fr", true
+	case first == 'g' && second == 'b':
+		return "gb", true
+	case first == 'i' && second == 'n':
+		return "in", true
+	case first == 'i' && second == 't':
+		return "it", true
+	case first == 'j' && second == 'p':
+		return "jp", true
+	case first == 'k' && second == 'r':
+		return "kr", true
+	case first == 'u' && second == 'k':
+		return "gb", true
+	case first == 'u' && second == 's':
+		return "us", true
 	}
 
-	return true
+	return "", false
+}
+
+func normalizeThreeCharacterCountry(country string) (string, bool) {
+	first := toLowerASCII(country[0])
+	second := toLowerASCII(country[1])
+	third := toLowerASCII(country[2])
+	switch {
+	case first == 'b' && second == 'r' && third == 'a':
+		return "br", true
+	case first == 'c' && second == 'h' && third == 'n':
+		return "cn", true
+	case first == 'd' && second == 'e' && third == 'u':
+		return "de", true
+	case first == 'f' && second == 'r' && third == 'a':
+		return "fr", true
+	case first == 'g' && second == 'b' && third == 'r':
+		return "gb", true
+	case first == 'i' && second == 'n' && third == 'd':
+		return "in", true
+	case first == 'i' && second == 't' && third == 'a':
+		return "it", true
+	case first == 'j' && second == 'p' && third == 'n':
+		return "jp", true
+	case first == 'k' && second == 'o' && third == 'r':
+		return "kr", true
+	case first == 'u' && second == 's' && third == 'a':
+		return "us", true
+	}
+
+	return "", false
+}
+
+func normalizeTelephoneCountryCode(first byte, second byte) (string, bool) {
+	switch {
+	case first == '3' && second == '3':
+		return "fr", true
+	case first == '3' && second == '9':
+		return "it", true
+	case first == '4' && second == '4':
+		return "gb", true
+	case first == '4' && second == '9':
+		return "de", true
+	case first == '5' && second == '5':
+		return "br", true
+	case first == '8' && second == '1':
+		return "jp", true
+	case first == '8' && second == '2':
+		return "kr", true
+	case first == '8' && second == '6':
+		return "cn", true
+	case first == '9' && second == '1':
+		return "in", true
+	}
+
+	return "", false
+}
+
+func toLowerASCII(value byte) byte {
+	if value >= 'A' && value <= 'Z' {
+		return value + 'a' - 'A'
+	}
+
+	return value
 }

@@ -7,10 +7,11 @@ var unitedStatesRule = countryRule{
 	prefixFunc: isUnitedStatesTelephonePrefixValid,
 }
 
-func isUnitedStatesTelephonePrefixValid(value []byte) bool {
-	if len(value) != 10 {
+func isUnitedStatesTelephonePrefixValid(value telephoneNumber, start int, length int) bool {
+	if length != 10 {
 		return false
 	}
 
-	return value[0] >= '2' && value[0] <= '9' && value[3] >= '2' && value[3] <= '9'
+	return value.digits[start] >= '2' && value.digits[start] <= '9' &&
+		value.digits[start+3] >= '2' && value.digits[start+3] <= '9'
 }

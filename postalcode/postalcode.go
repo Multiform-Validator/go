@@ -155,50 +155,87 @@ func normalizeCountry(country string) (string, bool) {
 }
 
 func normalizeShortCountry(country string) (string, bool) {
-	switch {
-	case equalFoldASCII(country, "br") || equalFoldASCII(country, "bra"):
-		return "br", true
-	case equalFoldASCII(country, "ca"):
-		return "ca", true
-	case equalFoldASCII(country, "ch") || equalFoldASCII(country, "che"):
-		return "ch", true
-	case equalFoldASCII(country, "de") || equalFoldASCII(country, "deu"):
-		return "de", true
-	case equalFoldASCII(country, "es") || equalFoldASCII(country, "esp"):
-		return "es", true
-	case equalFoldASCII(country, "fr") || equalFoldASCII(country, "fra"):
-		return "fr", true
-	case equalFoldASCII(country, "gb") || equalFoldASCII(country, "gbr") || equalFoldASCII(country, "uk"):
-		return "gb", true
-	case equalFoldASCII(country, "it") || equalFoldASCII(country, "ita"):
-		return "it", true
-	case equalFoldASCII(country, "jp") || equalFoldASCII(country, "jpn"):
-		return "jp", true
-	case equalFoldASCII(country, "nl") || equalFoldASCII(country, "nld"):
-		return "nl", true
-	case equalFoldASCII(country, "us") || equalFoldASCII(country, "usa"):
-		return "us", true
-	case equalFoldASCII(country, "za") || equalFoldASCII(country, "zaf"):
-		return "za", true
-	default:
-		return "", false
+	switch len(country) {
+	case 2:
+		return normalizeTwoCharacterCountry(country)
+	case 3:
+		return normalizeThreeCharacterCountry(country)
 	}
+
+	return "", false
 }
 
-func equalFoldASCII(a string, b string) bool {
-	if len(a) != len(b) {
-		return false
+func normalizeTwoCharacterCountry(country string) (string, bool) {
+	first := toLowerASCII(country[0])
+	second := toLowerASCII(country[1])
+	switch {
+	case first == 'b' && second == 'r':
+		return "br", true
+	case first == 'c' && second == 'a':
+		return "ca", true
+	case first == 'c' && second == 'h':
+		return "ch", true
+	case first == 'd' && second == 'e':
+		return "de", true
+	case first == 'e' && second == 's':
+		return "es", true
+	case first == 'f' && second == 'r':
+		return "fr", true
+	case first == 'g' && second == 'b':
+		return "gb", true
+	case first == 'i' && second == 't':
+		return "it", true
+	case first == 'j' && second == 'p':
+		return "jp", true
+	case first == 'n' && second == 'l':
+		return "nl", true
+	case first == 'u' && second == 'k':
+		return "gb", true
+	case first == 'u' && second == 's':
+		return "us", true
+	case first == 'z' && second == 'a':
+		return "za", true
 	}
 
-	for i := 0; i < len(a); i++ {
-		c := a[i]
-		if c >= 'A' && c <= 'Z' {
-			c += 'a' - 'A'
-		}
-		if c != b[i] {
-			return false
-		}
+	return "", false
+}
+
+func normalizeThreeCharacterCountry(country string) (string, bool) {
+	first := toLowerASCII(country[0])
+	second := toLowerASCII(country[1])
+	third := toLowerASCII(country[2])
+	switch {
+	case first == 'b' && second == 'r' && third == 'a':
+		return "br", true
+	case first == 'c' && second == 'h' && third == 'e':
+		return "ch", true
+	case first == 'd' && second == 'e' && third == 'u':
+		return "de", true
+	case first == 'e' && second == 's' && third == 'p':
+		return "es", true
+	case first == 'f' && second == 'r' && third == 'a':
+		return "fr", true
+	case first == 'g' && second == 'b' && third == 'r':
+		return "gb", true
+	case first == 'i' && second == 't' && third == 'a':
+		return "it", true
+	case first == 'j' && second == 'p' && third == 'n':
+		return "jp", true
+	case first == 'n' && second == 'l' && third == 'd':
+		return "nl", true
+	case first == 'u' && second == 's' && third == 'a':
+		return "us", true
+	case first == 'z' && second == 'a' && third == 'f':
+		return "za", true
 	}
 
-	return true
+	return "", false
+}
+
+func toLowerASCII(value byte) byte {
+	if value >= 'A' && value <= 'Z' {
+		return value + 'a' - 'A'
+	}
+
+	return value
 }

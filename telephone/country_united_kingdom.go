@@ -7,12 +7,12 @@ var unitedKingdomRule = countryRule{
 	prefixFunc: isUnitedKingdomTelephonePrefixValid,
 }
 
-func isUnitedKingdomTelephonePrefixValid(value []byte) bool {
-	if len(value) == 0 {
+func isUnitedKingdomTelephonePrefixValid(value telephoneNumber, start int, length int) bool {
+	if length == 0 {
 		return false
 	}
 
-	switch value[0] {
+	switch value.digits[start] {
 	case '1', '2', '3', '7', '8':
 		return true
 	}

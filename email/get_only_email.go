@@ -66,7 +66,7 @@ func GetOnlyEmail(value string, options ...GetOnlyEmailOptions) string {
 func GetOnlyEmails(value string, options ...GetOnlyEmailOptions) []string {
 	option := getOnlyEmailOption(options)
 	cleanDomains := getCleanDomains(option)
-	emails := make([]string, 0)
+	emails := make([]string, 0, 4)
 	seen := make(map[string]struct{})
 
 	for start := 0; start < len(value); {

@@ -7,12 +7,12 @@ var brazilRule = countryRule{
 	prefixFunc: isBrazilTelephonePrefixValid,
 }
 
-func isBrazilTelephonePrefixValid(value []byte) bool {
-	if len(value) < 2 {
+func isBrazilTelephonePrefixValid(value telephoneNumber, start int, length int) bool {
+	if length < 2 {
 		return false
 	}
 
-	first := value[0]
-	second := value[1]
+	first := value.digits[start]
+	second := value.digits[start+1]
 	return first >= '1' && first <= '9' && second >= '1' && second <= '9'
 }
