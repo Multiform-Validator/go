@@ -23,3 +23,52 @@ func TestUnitedKingdomPostalCodeBranches(t *testing.T) {
 		})
 	}
 }
+
+func TestNormalizeShortCountryAliases(t *testing.T) {
+	tests := []struct {
+		country string
+		want    string
+	}{
+		{"BR", "br"},
+		{"CA", "ca"},
+		{"CH", "ch"},
+		{"DE", "de"},
+		{"ES", "es"},
+		{"FR", "fr"},
+		{"GB", "gb"},
+		{"IT", "it"},
+		{"JP", "jp"},
+		{"NL", "nl"},
+		{"UK", "gb"},
+		{"US", "us"},
+		{"ZA", "za"},
+		{"BRA", "br"},
+		{"CHE", "ch"},
+		{"DEU", "de"},
+		{"ESP", "es"},
+		{"FRA", "fr"},
+		{"GBR", "gb"},
+		{"ITA", "it"},
+		{"JPN", "jp"},
+		{"NLD", "nl"},
+		{"USA", "us"},
+		{"ZAF", "za"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.country, func(t *testing.T) {
+			got, ok := normalizeShortCountry(tt.country)
+			if !ok || got != tt.want {
+				t.Fatalf("normalizeShortCountry() = %q, %v; want %q, true", got, ok, tt.want)
+			}
+		})
+	}
+
+	if got, ok := normalizeShortCountry("ZZ"); ok || got != "" {
+		t.Fatalf("normalizeShortCountry() = %q, %v; want empty, false", got, ok)
+	}
+
+	if got, ok := normalizeShortCountry("ZZZ"); ok || got != "" {
+		t.Fatalf("normalizeShortCountry() = %q, %v; want empty, false", got, ok)
+	}
+}

@@ -65,6 +65,77 @@ func TestTelephoneHelperBranches(t *testing.T) {
 	}
 }
 
+func TestNormalizeShortCountryAliases(t *testing.T) {
+	tests := []struct {
+		country string
+		want    string
+	}{
+		{"1", "us"},
+		{"+1", "us"},
+		{"33", "fr"},
+		{"39", "it"},
+		{"44", "gb"},
+		{"49", "de"},
+		{"55", "br"},
+		{"81", "jp"},
+		{"82", "kr"},
+		{"86", "cn"},
+		{"91", "in"},
+		{"+33", "fr"},
+		{"+39", "it"},
+		{"+44", "gb"},
+		{"+49", "de"},
+		{"+55", "br"},
+		{"+81", "jp"},
+		{"+82", "kr"},
+		{"+86", "cn"},
+		{"+91", "in"},
+		{"BR", "br"},
+		{"CA", "ca"},
+		{"CN", "cn"},
+		{"DE", "de"},
+		{"FR", "fr"},
+		{"GB", "gb"},
+		{"IN", "in"},
+		{"IT", "it"},
+		{"JP", "jp"},
+		{"KR", "kr"},
+		{"UK", "gb"},
+		{"US", "us"},
+		{"BRA", "br"},
+		{"CHN", "cn"},
+		{"DEU", "de"},
+		{"FRA", "fr"},
+		{"GBR", "gb"},
+		{"IND", "in"},
+		{"ITA", "it"},
+		{"JPN", "jp"},
+		{"KOR", "kr"},
+		{"USA", "us"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.country, func(t *testing.T) {
+			got, ok := normalizeShortCountry(tt.country)
+			if !ok || got != tt.want {
+				t.Fatalf("normalizeShortCountry() = %q, %v; want %q, true", got, ok, tt.want)
+			}
+		})
+	}
+
+	if got, ok := normalizeShortCountry("+00"); ok || got != "" {
+		t.Fatalf("normalizeShortCountry() = %q, %v; want empty, false", got, ok)
+	}
+
+	if got, ok := normalizeShortCountry("ZZ"); ok || got != "" {
+		t.Fatalf("normalizeShortCountry() = %q, %v; want empty, false", got, ok)
+	}
+
+	if got, ok := normalizeShortCountry("ZZZ"); ok || got != "" {
+		t.Fatalf("normalizeShortCountry() = %q, %v; want empty, false", got, ok)
+	}
+}
+
 func TestCountryPrefixValidationBranches(t *testing.T) {
 	tests := []struct {
 		name string
