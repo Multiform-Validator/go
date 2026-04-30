@@ -8,13 +8,39 @@ import (
 	"github.com/Multiform-Validator/go/validate"
 )
 
-func ExampleIsCPF() {
-	fmt.Println(mv.IsCPF("123.456.789-09") == nil)
-	fmt.Println(mv.IsCPF("123.456.789-02") == nil)
+func ExampleIsAscii() {
+	fmt.Println(mv.IsAscii("Hello 123!") == nil)
+	fmt.Println(mv.IsAscii("olá") == nil)
 
 	// Output:
 	// true
 	// false
+}
+
+func ExampleIsBase64() {
+	fmt.Println(mv.IsBase64("SGVsbG8gV29ybGQ=") == nil)
+	fmt.Println(mv.IsBase64("SGVs bG8=") == nil)
+
+	// Output:
+	// true
+	// false
+}
+
+func ExampleIsCEP() {
+	fmt.Println(mv.IsCEP("12345-678") == nil)
+	fmt.Println(mv.IsCEP("12345.678") == nil)
+
+	// Output:
+	// true
+	// false
+}
+
+func ExampleCalculateCNPJCheckDigits() {
+	digits, err := mv.CalculateCNPJCheckDigits("12ABC34501DE")
+	fmt.Println(digits, err == nil)
+
+	// Output:
+	// 35 true
 }
 
 func ExampleIsCNPJ() {
@@ -26,9 +52,27 @@ func ExampleIsCNPJ() {
 	// false
 }
 
-func ExampleIsEmail() {
-	fmt.Println(mv.IsEmail("user@example.com") == nil)
-	fmt.Println(mv.IsEmail("user.example.com") == nil)
+func ExampleIsCPF() {
+	fmt.Println(mv.IsCPF("123.456.789-09") == nil)
+	fmt.Println(mv.IsCPF("123.456.789-02") == nil)
+
+	// Output:
+	// true
+	// false
+}
+
+func ExampleIdentifyFlagCard() {
+	fmt.Println(mv.IdentifyFlagCard("4111 1111 1111 1111"))
+	fmt.Println(mv.IdentifyFlagCard("7000 0000 0000 0000"))
+
+	// Output:
+	// Visa
+	// Unknown
+}
+
+func ExampleIsCreditCard() {
+	fmt.Println(mv.IsCreditCard("4111 1111 1111 1111") == nil)
+	fmt.Println(mv.IsCreditCard("4111 1111 1111 1112") == nil)
 
 	// Output:
 	// true
@@ -53,36 +97,9 @@ func ExampleGetOnlyEmails() {
 	// [john@gmail.com alexa@gmail.com]
 }
 
-func ExampleIsCreditCard() {
-	fmt.Println(mv.IsCreditCard("4111 1111 1111 1111") == nil)
-	fmt.Println(mv.IsCreditCard("4111 1111 1111 1112") == nil)
-
-	// Output:
-	// true
-	// false
-}
-
-func ExampleIdentifyFlagCard() {
-	fmt.Println(mv.IdentifyFlagCard("4111 1111 1111 1111"))
-	fmt.Println(mv.IdentifyFlagCard("7000 0000 0000 0000"))
-
-	// Output:
-	// Visa
-	// Unknown
-}
-
-func ExampleIsTelephone() {
-	fmt.Println(mv.IsTelephone("+55 11 91234-5678", "BR") == nil)
-	fmt.Println(mv.IsTelephone("+91 51234 56789", "IN") == nil)
-
-	// Output:
-	// true
-	// false
-}
-
-func ExampleIsBase64() {
-	fmt.Println(mv.IsBase64("SGVsbG8gV29ybGQ=") == nil)
-	fmt.Println(mv.IsBase64("SGVs bG8=") == nil)
+func ExampleIsEmail() {
+	fmt.Println(mv.IsEmail("user@example.com") == nil)
+	fmt.Println(mv.IsEmail("user.example.com") == nil)
 
 	// Output:
 	// true
@@ -98,9 +115,9 @@ func ExampleIsMD5() {
 	// false
 }
 
-func ExampleIsCEP() {
-	fmt.Println(mv.IsCEP("12345-678") == nil)
-	fmt.Println(mv.IsCEP("12345.678") == nil)
+func ExampleIsPort() {
+	fmt.Println(mv.IsPort("8080") == nil)
+	fmt.Println(mv.IsPort("65536") == nil)
 
 	// Output:
 	// true
@@ -116,9 +133,9 @@ func ExampleIsPostalCode() {
 	// false
 }
 
-func ExampleIsPort() {
-	fmt.Println(mv.IsPort("8080") == nil)
-	fmt.Println(mv.IsPort("65536") == nil)
+func ExampleIsTelephone() {
+	fmt.Println(mv.IsTelephone("+55 11 91234-5678", "BR") == nil)
+	fmt.Println(mv.IsTelephone("+91 51234 56789", "IN") == nil)
 
 	// Output:
 	// true
@@ -132,23 +149,6 @@ func ExampleIsBlank() {
 	// Output:
 	// true
 	// false
-}
-
-func ExampleIsAscii() {
-	fmt.Println(mv.IsAscii("Hello 123!") == nil)
-	fmt.Println(mv.IsAscii("olá") == nil)
-
-	// Output:
-	// true
-	// false
-}
-
-func ExampleCalculateCNPJCheckDigits() {
-	digits, err := mv.CalculateCNPJCheckDigits("12ABC34501DE")
-	fmt.Println(digits, err == nil)
-
-	// Output:
-	// 35 true
 }
 
 func Example_validateEmail() {
