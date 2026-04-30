@@ -1,8 +1,8 @@
 # Multiform Validator Go
 
-Go library made for validating several form fields and common values, such as email, telephone, password, CPF, CNPJ, credit card, real image bytes, and much more.
+Go library made for validating several form fields and common values, such as ASCII, Base64, CEP, CNPJ, CPF, credit card, email, real image bytes, MAC address, MD5, port, postal code, telephone, password, and much more.
 
-This package is the Go version of Multiform Validator. It currently includes CPF, CNPJ, email, image, credit card, telephone, password, empty, blank, ASCII, Base64, CEP, MD5, port, and higher-level validation helpers, with more validators being added over time. The CNPJ validator supports both the old LEGACY numeric CNPJ format and the new alphanumeric CNPJ format, in accordance with the official Receita Federal / SERPRO specification.
+This package is the Go version of Multiform Validator. It currently includes ASCII, Base64, CEP, CNPJ, CPF, credit card, email, image, MAC address, MD5, port, postal code, telephone, text, and higher-level validation helpers, with more validators being added over time. The CNPJ validator supports both the old LEGACY numeric CNPJ format and the new alphanumeric CNPJ format, in accordance with the official Receita Federal / SERPRO specification.
 
 ## Install
 
@@ -24,7 +24,7 @@ import (
 )
 
 func main() {
-	if err := mv.IsCPF("123.456.789-09"); err != nil {
+	if err := mv.IsCEP("12345-678"); err != nil {
 		fmt.Println(err)
 	}
 
@@ -36,7 +36,56 @@ func main() {
 		fmt.Println(err)
 	}
 
+	if err := mv.IsCPF("123.456.789-09"); err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(mv.IdentifyFlagCard("4111 1111 1111 1111"))
+
+	if err := mv.IsCreditCard("4111 1111 1111 1111"); err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(mv.GetOnlyEmail("Contact team: joao@empresa.com, maria@empresa.com"))
+
 	if err := mv.IsEmail("user@example.com"); err != nil {
+		fmt.Println(err)
+	}
+
+	imageBytes, err := os.ReadFile("avatar.png")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	if err := mv.IsImage(imageBytes); err != nil {
+		fmt.Println(err)
+	}
+
+	if err := mv.IsMACAddress("00:1A:2B:3C:4D:5E"); err != nil {
+		fmt.Println(err)
+	}
+
+	if err := mv.IsPort("8080"); err != nil {
+		fmt.Println(err)
+	}
+
+	if err := mv.IsPortNumber(8080); err != nil {
+		fmt.Println(err)
+	}
+
+	if err := mv.IsPostalCode("10045-123", "BR"); err != nil {
+		fmt.Println(err)
+	}
+
+	if err := mv.IsTelephone("+55 11 91234-5678", "BR"); err != nil {
+		fmt.Println(err)
+	}
+
+	if err := mv.IsBlank("   "); err != nil {
+		fmt.Println(err)
+	}
+
+	if err := mv.IsEmpty(""); err != nil {
 		fmt.Println(err)
 	}
 
@@ -52,55 +101,6 @@ func main() {
 		RequireNumber:      true,
 		RequireLetter:      true,
 	}); err != nil {
-		fmt.Println(err)
-	}
-
-	imageBytes, err := os.ReadFile("avatar.png")
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	if err := mv.IsImage(imageBytes); err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println(mv.GetOnlyEmail("Contact team: joao@empresa.com, maria@empresa.com"))
-
-	if err := mv.IsCreditCard("4111 1111 1111 1111"); err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println(mv.IdentifyFlagCard("4111 1111 1111 1111"))
-
-	if err := mv.IsTelephone("+55 11 91234-5678", "BR"); err != nil {
-		fmt.Println(err)
-	}
-
-	if err := mv.IsEmpty(""); err != nil {
-		fmt.Println(err)
-	}
-
-	if err := mv.IsBlank("   "); err != nil {
-		fmt.Println(err)
-	}
-
-	if err := mv.IsCEP("12345-678"); err != nil {
-		fmt.Println(err)
-	}
-
-	if err := mv.IsPostalCode("10045-123", "BR"); err != nil {
-		fmt.Println(err)
-	}
-
-	if err := mv.IsMACAddress("00:1A:2B:3C:4D:5E"); err != nil {
-		fmt.Println(err)
-	}
-
-	if err := mv.IsPort("8080"); err != nil {
-		fmt.Println(err)
-	}
-
-	if err := mv.IsPortNumber(8080); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -136,29 +136,29 @@ The `validate` package is intentionally separate and works a little differently.
 
 ## Available Validators
 
-- `IsCPF`
-- `IsCNPJ`
-- `IsEmail`
-- `IsImage`
-- `GetOnlyEmail`
-- `GetOnlyEmails`
-- `IsCreditCard`
-- `IdentifyFlagCard`
-- `IsTelephone`
-- `IsEmpty`
-- `IsEmptyBytes`
-- `IsBlank`
-- `IsBlankBytes`
 - `IsAscii`
 - `IsAsciiBytes`
 - `IsBase64`
-- `IsMACAddress`
 - `IsCEP`
-- `IsPostalCode`
+- `CalculateCNPJCheckDigits`
+- `IsCNPJ`
+- `IsCPF`
+- `IdentifyFlagCard`
+- `IsCreditCard`
+- `GetOnlyEmail`
+- `GetOnlyEmails`
+- `IsEmail`
+- `IsImage`
+- `IsMACAddress`
 - `IsMD5`
 - `IsPort`
 - `IsPortNumber`
-- `CalculateCNPJCheckDigits`
+- `IsPostalCode`
+- `IsTelephone`
+- `IsBlank`
+- `IsBlankBytes`
+- `IsEmpty`
+- `IsEmptyBytes`
 - `validate.Email`
 - `validate.Password`
 

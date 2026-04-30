@@ -18,92 +18,6 @@ var (
 	benchStrings []string
 )
 
-func BenchmarkIsCPF(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		benchErr = mv.IsCPF("123.456.789-09")
-	}
-}
-
-func BenchmarkIsCNPJ(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		benchErr = mv.IsCNPJ("12.ABC.345/01DE-35")
-	}
-}
-
-func BenchmarkIsEmail(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		benchErr = mv.IsEmail("user@example.com")
-	}
-}
-
-func BenchmarkIsImage(b *testing.B) {
-	value := benchmarkPNGBytes(b)
-	b.ResetTimer()
-
-	for i := 0; i < b.N; i++ {
-		benchErr = mv.IsImage(value)
-	}
-}
-
-func BenchmarkGetOnlyEmail(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		benchString = mv.GetOnlyEmail("Contact team: john@gmail.com, alexa@gmail.com")
-	}
-}
-
-func BenchmarkGetOnlyEmails(b *testing.B) {
-	options := email.GetOnlyEmailOptions{CleanDomain: true, RepeatEmail: true}
-	for i := 0; i < b.N; i++ {
-		benchStrings = mv.GetOnlyEmails(
-			"Contact team: john@gmail.comXTRA, alexa@gmail.comXTRA",
-			options,
-		)
-	}
-}
-
-func BenchmarkIsCreditCard(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		benchErr = mv.IsCreditCard("4111 1111 1111 1111")
-	}
-}
-
-func BenchmarkIdentifyFlagCard(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		benchString = mv.IdentifyFlagCard("4111 1111 1111 1111")
-	}
-}
-
-func BenchmarkIsTelephone(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		benchErr = mv.IsTelephone("+55 11 91234-5678", "BR")
-	}
-}
-
-func BenchmarkIsEmpty(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		benchErr = mv.IsEmpty("")
-	}
-}
-
-func BenchmarkIsEmptyBytes(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		benchErr = mv.IsEmptyBytes(nil)
-	}
-}
-
-func BenchmarkIsBlank(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		benchErr = mv.IsBlank(" \t\n")
-	}
-}
-
-func BenchmarkIsBlankBytes(b *testing.B) {
-	value := []byte(" \t\n")
-	for i := 0; i < b.N; i++ {
-		benchErr = mv.IsBlankBytes(value)
-	}
-}
-
 func BenchmarkIsAscii(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		benchErr = mv.IsAscii("Hello 123!")
@@ -123,21 +37,76 @@ func BenchmarkIsBase64(b *testing.B) {
 	}
 }
 
-func BenchmarkIsMACAddress(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		benchErr = mv.IsMACAddress("00:1A:2B:3C:4D:5E")
-	}
-}
-
 func BenchmarkIsCEP(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		benchErr = mv.IsCEP("12345-678")
 	}
 }
 
-func BenchmarkIsPostalCode(b *testing.B) {
+func BenchmarkCalculateCNPJCheckDigits(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		benchErr = mv.IsPostalCode("SW1A 1AA", "UK")
+		benchString, benchErr = mv.CalculateCNPJCheckDigits("12ABC34501DE")
+	}
+}
+
+func BenchmarkIsCNPJ(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		benchErr = mv.IsCNPJ("12.ABC.345/01DE-35")
+	}
+}
+
+func BenchmarkIsCPF(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		benchErr = mv.IsCPF("123.456.789-09")
+	}
+}
+
+func BenchmarkIdentifyFlagCard(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		benchString = mv.IdentifyFlagCard("4111 1111 1111 1111")
+	}
+}
+
+func BenchmarkIsCreditCard(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		benchErr = mv.IsCreditCard("4111 1111 1111 1111")
+	}
+}
+
+func BenchmarkGetOnlyEmail(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		benchString = mv.GetOnlyEmail("Contact team: john@gmail.com, alexa@gmail.com")
+	}
+}
+
+func BenchmarkGetOnlyEmails(b *testing.B) {
+	options := email.GetOnlyEmailOptions{CleanDomain: true, RepeatEmail: true}
+	for i := 0; i < b.N; i++ {
+		benchStrings = mv.GetOnlyEmails(
+			"Contact team: john@gmail.comXTRA, alexa@gmail.comXTRA",
+			options,
+		)
+	}
+}
+
+func BenchmarkIsEmail(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		benchErr = mv.IsEmail("user@example.com")
+	}
+}
+
+func BenchmarkIsImage(b *testing.B) {
+	value := benchmarkPNGBytes(b)
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		benchErr = mv.IsImage(value)
+	}
+}
+
+func BenchmarkIsMACAddress(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		benchErr = mv.IsMACAddress("00:1A:2B:3C:4D:5E")
 	}
 }
 
@@ -159,9 +128,40 @@ func BenchmarkIsPortNumber(b *testing.B) {
 	}
 }
 
-func BenchmarkCalculateCNPJCheckDigits(b *testing.B) {
+func BenchmarkIsPostalCode(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		benchString, benchErr = mv.CalculateCNPJCheckDigits("12ABC34501DE")
+		benchErr = mv.IsPostalCode("SW1A 1AA", "UK")
+	}
+}
+
+func BenchmarkIsTelephone(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		benchErr = mv.IsTelephone("+55 11 91234-5678", "BR")
+	}
+}
+
+func BenchmarkIsBlank(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		benchErr = mv.IsBlank(" \t\n")
+	}
+}
+
+func BenchmarkIsBlankBytes(b *testing.B) {
+	value := []byte(" \t\n")
+	for i := 0; i < b.N; i++ {
+		benchErr = mv.IsBlankBytes(value)
+	}
+}
+
+func BenchmarkIsEmpty(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		benchErr = mv.IsEmpty("")
+	}
+}
+
+func BenchmarkIsEmptyBytes(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		benchErr = mv.IsEmptyBytes(nil)
 	}
 }
 
