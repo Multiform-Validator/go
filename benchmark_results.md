@@ -19,6 +19,7 @@ cpu: Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz
 
 Results:
 
+```text
 BenchmarkIsCPF-8                      	26688848	        42.13 ns/op	       0 B/op	       0 allocs/op
 BenchmarkIsCPF-8                      	28264622	        42.17 ns/op	       0 B/op	       0 allocs/op
 BenchmarkIsCPF-8                      	27905773	        42.20 ns/op	       0 B/op	       0 allocs/op
