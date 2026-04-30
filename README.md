@@ -24,6 +24,14 @@ import (
 )
 
 func main() {
+	if err := mv.IsAscii("Hello 123!"); err != nil {
+		fmt.Println(err)
+	}
+
+	if err := mv.IsBase64("SGVsbG8gV29ybGQ="); err != nil {
+		fmt.Println(err)
+	}
+
 	if err := mv.IsCEP("12345-678"); err != nil {
 		fmt.Println(err)
 	}

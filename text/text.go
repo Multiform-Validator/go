@@ -7,25 +7,9 @@ import (
 )
 
 var (
-	ErrValueNotEmpty = errors.New("value is not empty")
 	ErrValueNotBlank = errors.New("value is not blank")
+	ErrValueNotEmpty = errors.New("value is not empty")
 )
-
-func IsEmpty(value string) error {
-	if value != "" {
-		return ErrValueNotEmpty
-	}
-
-	return nil
-}
-
-func IsEmptyBytes(value []byte) error {
-	if len(value) != 0 {
-		return ErrValueNotEmpty
-	}
-
-	return nil
-}
 
 func IsBlank(value string) error {
 	if strings.TrimSpace(value) != "" {
@@ -38,6 +22,22 @@ func IsBlank(value string) error {
 func IsBlankBytes(value []byte) error {
 	if len(bytes.TrimSpace(value)) != 0 {
 		return ErrValueNotBlank
+	}
+
+	return nil
+}
+
+func IsEmpty(value string) error {
+	if value != "" {
+		return ErrValueNotEmpty
+	}
+
+	return nil
+}
+
+func IsEmptyBytes(value []byte) error {
+	if len(value) != 0 {
+		return ErrValueNotEmpty
 	}
 
 	return nil
