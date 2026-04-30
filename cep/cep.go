@@ -13,50 +13,39 @@ var (
 )
 
 func IsCEP(cep string) error {
-	cep, ok := removeFormattingCharacters(cep)
+	count, onlyDigits, ok := analyzeCEPCharacters(cep)
 	if !ok {
 		return ErrCEPNotValid
 	}
 
-	if len(cep) != cepSize {
+	if count != cepSize {
 		return ErrCEPMustHave8Digits
 	}
 
-	if !hasOnlyDigits(cep) {
+	if !onlyDigits {
 		return ErrCEPNotValid
 	}
 
 	return nil
 }
 
-func removeFormattingCharacters(cep string) (string, bool) {
+func analyzeCEPCharacters(cep string) (int, bool, bool) {
 	cep = strings.TrimSpace(cep)
 	if strings.ContainsAny(cep, "./ ") {
-		return "", false
+		return 0, false, false
 	}
 
+	count := 0
+	onlyDigits := true
 	for i := 0; i < len(cep); i++ {
 		if cep[i] == '-' {
-			cleaned := make([]byte, 0, len(cep)-1)
-			cleaned = append(cleaned, cep[:i]...)
-			for ; i < len(cep); i++ {
-				if cep[i] != '-' {
-					cleaned = append(cleaned, cep[i])
-				}
-			}
-			return string(cleaned), true
+			continue
 		}
+		if cep[i] < '0' || cep[i] > '9' {
+			onlyDigits = false
+		}
+		count++
 	}
 
-	return cep, true
-}
-
-func hasOnlyDigits(value string) bool {
-	for i := 0; i < len(value); i++ {
-		if value[i] < '0' || value[i] > '9' {
-			return false
-		}
-	}
-
-	return true
+	return count, onlyDigits, true
 }
