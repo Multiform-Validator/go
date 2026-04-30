@@ -12,7 +12,7 @@ var (
 )
 
 func IsEmpty(value string) error {
-	if len(value) != 0 {
+	if value != "" {
 		return ErrValueNotEmpty
 	}
 
