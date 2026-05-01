@@ -18,7 +18,7 @@ func IsImage(value []byte) error {
 		return ErrImageNotValid
 	}
 
-	if _, _, err := stdimage.Decode(bytes.NewReader(value)); err != nil {
+	if _, _, err := stdimage.DecodeConfig(bytes.NewReader(value)); err != nil {
 		return ErrImageNotValid
 	}
 

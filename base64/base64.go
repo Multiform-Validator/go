@@ -1,7 +1,6 @@
 package base64
 
 import (
-	stdbase64 "encoding/base64"
 	"errors"
 	"strings"
 )
@@ -10,38 +9,57 @@ var (
 	ErrBase64NotValid = errors.New("base64 is not valid")
 )
 
-var encodings = []*stdbase64.Encoding{
-	stdbase64.StdEncoding.Strict(),
-	stdbase64.RawStdEncoding.Strict(),
-	stdbase64.URLEncoding.Strict(),
-	stdbase64.RawURLEncoding.Strict(),
-}
-
 func IsBase64(value string) error {
 	value = strings.TrimSpace(value)
-	if value == "" || hasWhitespace(value) || !canDecodeBase64(value) {
+	if !hasValidBase64Format(value) {
 		return ErrBase64NotValid
 	}
 
 	return nil
 }
 
-func hasWhitespace(value string) bool {
-	for i := 0; i < len(value); i++ {
-		if value[i] == ' ' || value[i] == '\t' || value[i] == '\n' || value[i] == '\r' {
-			return true
+func hasValidBase64Format(value string) bool {
+	if len(value) == 0 || len(value)%4 == 1 {
+		return false
+	}
+
+	padding := 0
+	for i := len(value) - 1; i >= 0 && value[i] == '='; i-- {
+		padding++
+	}
+
+	if padding > 2 || (padding > 0 && len(value)%4 != 0) {
+		return false
+	}
+
+	dataEnd := len(value) - padding
+	for i := 0; i < dataEnd; i++ {
+		if base64Value(value[i]) < 0 {
+			return false
 		}
 	}
 
-	return false
+	if padding > 0 {
+		strictPaddingMasks := [3]int{0, 0x03, 0x0F}
+		return base64Value(value[dataEnd-1])&strictPaddingMasks[padding] == 0
+	}
+
+	return true
 }
 
-func canDecodeBase64(value string) bool {
-	for _, encoding := range encodings {
-		if _, err := encoding.DecodeString(value); err == nil {
-			return true
-		}
+func base64Value(value byte) int {
+	switch {
+	case value >= 'A' && value <= 'Z':
+		return int(value - 'A')
+	case value >= 'a' && value <= 'z':
+		return int(value-'a') + 26
+	case value >= '0' && value <= '9':
+		return int(value-'0') + 52
 	}
 
-	return false
+	if index := strings.IndexByte("+/-_", value); index >= 0 {
+		return 62 + index/2
+	}
+
+	return -1
 }

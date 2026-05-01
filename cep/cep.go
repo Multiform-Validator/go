@@ -2,7 +2,6 @@ package cep
 
 import (
 	"errors"
-	"strings"
 )
 
 const cepSize = 8
@@ -30,17 +29,26 @@ func IsCEP(cep string) error {
 }
 
 func analyzeCEPCharacters(cep string) (int, bool, bool) {
-	cep = strings.TrimSpace(cep)
-	if strings.ContainsAny(cep, "./ ") {
-		return 0, false, false
+	start := 0
+	for start < len(cep) && cep[start] <= ' ' {
+		start++
+	}
+
+	end := len(cep)
+	for end > start && cep[end-1] <= ' ' {
+		end--
 	}
 
 	count := 0
 	onlyDigits := true
-	for i := 0; i < len(cep); i++ {
-		if cep[i] == '-' {
+	for i := start; i < end; i++ {
+		switch cep[i] {
+		case '-':
 			continue
+		case '.', '/', ' ', '\t', '\n', '\r':
+			return 0, false, false
 		}
+
 		if cep[i] < '0' || cep[i] > '9' {
 			onlyDigits = false
 		}

@@ -2,7 +2,6 @@ package port
 
 import (
 	"errors"
-	"strconv"
 	"strings"
 )
 
@@ -18,11 +17,11 @@ var (
 
 func IsPort(port string) error {
 	port = strings.TrimSpace(port)
-	if !hasOnlyDigits(port) {
+	value, ok := parsePort(port)
+	if !ok {
 		return ErrPortNotValid
 	}
 
-	value, _ := strconv.Atoi(port)
 	return validatePortRange(value)
 }
 
@@ -38,16 +37,22 @@ func validatePortRange(port int) error {
 	return nil
 }
 
-func hasOnlyDigits(value string) bool {
+func parsePort(value string) (int, bool) {
 	if len(value) == 0 {
-		return false
+		return 0, false
 	}
 
+	port := 0
 	for i := 0; i < len(value); i++ {
 		if value[i] < '0' || value[i] > '9' {
-			return false
+			return 0, false
+		}
+
+		port = port*10 + int(value[i]-'0')
+		if port > maxPort {
+			return port, true
 		}
 	}
 
-	return true
+	return port, true
 }
