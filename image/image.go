@@ -20,16 +20,16 @@ var (
 )
 
 func IsImage(value []byte) error {
-	if !hasSupportedImageSignature(value) {
-		return ErrImageNotValid
-	}
-
 	if hasICOSignature(value) {
 		if !isICOValid(value) {
 			return ErrImageNotValid
 		}
 
 		return nil
+	}
+
+	if !hasSupportedImageSignature(value) {
+		return ErrImageNotValid
 	}
 
 	if _, _, err := stdimage.DecodeConfig(bytes.NewReader(value)); err != nil {
@@ -103,9 +103,9 @@ func isICOEntryValid(value []byte, entry []byte, directorySize int) bool {
 		return false
 	}
 
-	size := binary.LittleEndian.Uint32(entry[8:12])
-	offset := binary.LittleEndian.Uint32(entry[12:16])
-	if size == 0 || offset < uint32(directorySize) || offset > uint32(len(value)) || size > uint32(len(value))-offset {
+	size := littleEndianUint32AsInt(entry[8:12])
+	offset := littleEndianUint32AsInt(entry[12:16])
+	if size <= 0 || offset < directorySize || offset > len(value) || size > len(value)-offset {
 		return false
 	}
 
@@ -126,8 +126,8 @@ func isDIBHeaderValid(value []byte) bool {
 		return false
 	}
 
-	headerSize := binary.LittleEndian.Uint32(value[0:4])
-	if headerSize < 40 || headerSize > uint32(len(value)) {
+	headerSize := littleEndianUint32AsInt(value[0:4])
+	if headerSize < 40 || headerSize > len(value) {
 		return false
 	}
 
@@ -151,4 +151,11 @@ func isDIBBitCountValid(value uint16) bool {
 	default:
 		return false
 	}
+}
+
+func littleEndianUint32AsInt(value []byte) int {
+	return int(value[0]) |
+		int(value[1])<<8 |
+		int(value[2])<<16 |
+		int(value[3])<<24
 }
