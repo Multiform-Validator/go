@@ -17,6 +17,10 @@ This package is the Go version of Multiform Validator. It currently includes ASC
 go get github.com/Multiform-Validator/go
 ```
 
+## Compatibility
+
+This library is tested in CI with Go `1.20`, `1.21`, `1.22`, `1.23`, `1.24`, `1.25`, and `1.26`.
+
 ## Usage
 
 ```go
