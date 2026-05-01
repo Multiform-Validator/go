@@ -5,7 +5,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/Multiform-Validator/go)](https://goreportcard.com/report/github.com/Multiform-Validator/go)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/Multiform-Validator/go)](https://github.com/Multiform-Validator/go/blob/main/go.mod)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/Multiform-Validator/go/actions/workflows/pr-check.yml)
-[![License](https://img.shields.io/github/license/Multiform-Validator/go)](./LICENSE)
+[![License](https://img.shields.io/github/license/Multiform-Validator/go)](https://github.com/Multiform-Validator/go/blob/main/LICENSE)
 
 Go library made for validating several form fields and common values, such as ASCII, Base64, CEP, CNPJ, CPF, credit card, email, real image bytes, MAC address, MD5, port, postal code, telephone, password, and much more.
 
