@@ -1,5 +1,12 @@
 # Multiform Validator Go
 
+[![PR Check](https://github.com/Multiform-Validator/go/actions/workflows/pr-check.yml/badge.svg)](https://github.com/Multiform-Validator/go/actions/workflows/pr-check.yml)
+[![Go Reference](https://pkg.go.dev/badge/github.com/Multiform-Validator/go.svg)](https://pkg.go.dev/github.com/Multiform-Validator/go)
+[![Go Report Card](https://goreportcard.com/badge/github.com/Multiform-Validator/go)](https://goreportcard.com/report/github.com/Multiform-Validator/go)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/Multiform-Validator/go)](https://github.com/Multiform-Validator/go/blob/main/go.mod)
+[![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/Multiform-Validator/go/actions/workflows/pr-check.yml)
+[![License](https://img.shields.io/github/license/Multiform-Validator/go)](./LICENSE)
+
 Go library made for validating several form fields and common values, such as ASCII, Base64, CEP, CNPJ, CPF, credit card, email, real image bytes, MAC address, MD5, port, postal code, telephone, password, and much more.
 
 This package is the Go version of Multiform Validator. It currently includes ASCII, Base64, CEP, CNPJ, CPF, credit card, email, image, MAC address, MD5, port, postal code, telephone, text, and higher-level validation helpers, with more validators being added over time. The CNPJ validator supports both the old LEGACY numeric CNPJ format and the new alphanumeric CNPJ format, in accordance with the official Receita Federal / SERPRO specification.
@@ -187,3 +194,9 @@ The `validate` package is intentionally separate and works a little differently.
 ```bash
 make check
 ```
+
+Coverage is enforced in CI and currently must remain at `100.0%`.
+
+## Contributing
+
+Basic contribution guidelines are available in [CONTRIBUTING.md](./CONTRIBUTING.md).
