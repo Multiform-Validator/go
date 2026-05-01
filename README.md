@@ -174,6 +174,8 @@ The `validate` package is intentionally separate and works a little differently.
 
 `IsPostalCode` accepts an optional country argument. Current country-specific validation supports Brazil, United States, Canada, United Kingdom, France, Netherlands, Japan, Spain, South Africa, Germany, Switzerland, and Italy.
 
+`IsImage` validates real image bytes. It currently accepts PNG, JPEG, GIF, and ICO files. Other image-like formats, such as SVG, AVIF, PSD, and ICNS, are not considered valid by this validator.
+
 `IdentifyFlagCard` is a special helper from the credit card package, similar to how `GetOnlyEmail` belongs to the email package. It identifies the card flag by prefix and returns `Unknown` when no known flag matches.
 
 `validate.Email` provides higher-level email validation options inspired by the TypeScript package: max length, country suffix, default allowed domains, and custom allowed domains.
