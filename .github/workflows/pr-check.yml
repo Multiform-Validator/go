@@ -78,6 +78,12 @@ jobs:
           cache: true
           cache-dependency-path: go.mod
 
+      - name: Verify build
+        run: make build
+
+      - name: Run race tests
+        run: make test_race
+
       - name: Run tests with coverage
         run: make test_cov
 

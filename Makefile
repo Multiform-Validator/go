@@ -4,13 +4,19 @@ STATICCHECK_CACHE ?= /tmp/staticcheck
 export GOCACHE
 export STATICCHECK_CACHE
 
-.PHONY: fmt fmt_check vet staticcheck security lint check test test_v test_cov coverage coverage_html clean_cov
+.PHONY: fmt fmt_check vet staticcheck security lint check build test test_v test_race test_cov coverage coverage_html clean_cov
+
+build:
+	go build ./...
 
 test:
 	go test ./...
 
 test_v:
 	go test -v ./...
+
+test_race:
+	go test -race ./...
 
 test_cov:
 	go test ./... -coverprofile=cover.out -cover
@@ -51,7 +57,7 @@ security:
 
 lint: fmt_check vet staticcheck
 
-check: lint security test_cov coverage_html
+check: lint security build test_race test_cov coverage_html
 
 clean_cov:
 	rm -f cover.out coverage.html
