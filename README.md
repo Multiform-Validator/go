@@ -21,6 +21,16 @@ go get github.com/Multiform-Validator/go
 
 This library is tested in CI with Go `1.20`, `1.21`, `1.22`, `1.23`, `1.24`, `1.25`, and `1.26`.
 
+Lint, build, race tests, and unit tests run in CI for all of those versions.
+
+## Security
+
+Security checks do not currently run in CI for Go `1.20`, `1.21`, or `1.22`. The `security` job currently runs only for Go `1.23`, `1.24`, `1.25`, and `1.26`, so there is less security-check confidence for versions below `1.23`.
+
+Use Go versions below `1.23` only if you have no other choice. Go `>= 1.23` is the recommended baseline.
+
+When `govulncheck` is executed with Go `1.20`, `1.21`, or `1.22`, it may report `GO-2025-3750`, a vulnerability in the Go standard library on Windows, in `os` / `syscall`, related to inconsistent handling of `O_CREATE|O_EXCL`. At a minimum, this can cause incorrect file-creation exclusivity behavior. In the observed CI output, this appeared as `os@go1.22.12`, with a fix noted in `os@go1.23.10`.
+
 ## Usage
 
 ```go
