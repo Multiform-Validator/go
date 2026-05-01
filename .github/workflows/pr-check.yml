@@ -14,9 +14,13 @@ concurrency:
 
 jobs:
   lint:
-    name: Lint
+    name: Lint (Go ${{ matrix.go-version }})
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        go-version: ['1.20', '1.21', '1.22', '1.23', '1.24', '1.25', '1.26']
 
     steps:
       - name: Checkout
@@ -25,7 +29,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v6
         with:
-          go-version-file: go.mod
+          go-version: ${{ matrix.go-version }}
           cache: true
           cache-dependency-path: go.mod
 
@@ -42,9 +46,13 @@ jobs:
         run: make staticcheck
 
   test:
-    name: Test
+    name: Test (Go ${{ matrix.go-version }})
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        go-version: ['1.20', '1.21', '1.22', '1.23', '1.24', '1.25', '1.26']
 
     steps:
       - name: Checkout
@@ -53,7 +61,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v6
         with:
-          go-version-file: go.mod
+          go-version: ${{ matrix.go-version }}
           cache: true
           cache-dependency-path: go.mod
 
@@ -78,9 +86,13 @@ jobs:
           if-no-files-found: ignore
 
   security:
-    name: Security
+    name: Security (Go ${{ matrix.go-version }})
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        go-version: ['1.20', '1.21', '1.22', '1.23', '1.24', '1.25', '1.26']
 
     steps:
       - name: Checkout
@@ -89,7 +101,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v6
         with:
-          go-version-file: go.mod
+          go-version: ${{ matrix.go-version }}
           cache: true
           cache-dependency-path: go.mod
 
